@@ -1,0 +1,30 @@
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'sc-kpi-api'
+
+include 'common'
+
+include 'module-auth'
+project(':module-auth').projectDir = file('modules/module-auth')
+
+include 'module-user'
+project(':module-user').projectDir = file('modules/module-user')
+
+include 'module-engagements'
+project(':module-engagements').projectDir = file('modules/module-engagements')
+
+include 'module-council'
+project(':module-council').projectDir = file('modules/module-council')
+
+include 'module-document'
+project(':module-document').projectDir = file('modules/module-document')
+
+include 'module-notification'
+project(':module-notification').projectDir = file('modules/module-notification')
+
+include 'module-audit'
+project(':module-audit').projectDir = file('modules/module-audit')
+
+include 'app'
