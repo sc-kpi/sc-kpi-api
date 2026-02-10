@@ -1,0 +1,62 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+nul
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Environment ###
+.env
+.env.local
+.env.*.local
+
+### Docker Compose ###
+docker-compose.override.yml
+
+*.md
+!README.md
+!LICENSE.md
+!docs/*.md
+!docs/**/*.md
+
+### Logs ###
+*.log
+logs/
+
+### Upload storage ###
+uploads/

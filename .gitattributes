@@ -1,0 +1,15 @@
+# Auto-detect text files and normalize line endings to LF on commit
+* text=auto eol=lf
+
+# Force LF for shell scripts
+*.sh text eol=lf
+gradlew text eol=lf
+
+# Force CRLF for Windows batch scripts
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files — don't touch
+*.jar binary
+*.png binary
+*.jpg binary
