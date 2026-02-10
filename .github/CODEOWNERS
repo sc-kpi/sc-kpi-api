@@ -1,0 +1,46 @@
+# CODEOWNERS for sc-kpi-api
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Teams hierarchy (sc-kpi/digital-transformation):
+#   leadership / management, tech-leads
+#   engineering / frontend, backend, devops
+#   design
+#   qa / qa-manual, qa-automation
+
+# Default owners — Tech Leads have oversight of all code
+*                                       @sc-kpi/tech-leads
+
+# Application modules
+/modules/                               @sc-kpi/backend @sc-kpi/tech-leads
+/common/                                @sc-kpi/backend @sc-kpi/tech-leads
+/app/                                   @sc-kpi/backend @sc-kpi/tech-leads
+
+# Security-sensitive code (requires tech lead approval)
+**/security/                            @sc-kpi/tech-leads @sc-kpi/backend
+**/auth/                                @sc-kpi/tech-leads @sc-kpi/backend
+**/filter/                              @sc-kpi/tech-leads @sc-kpi/backend
+/modules/module-auth/                   @sc-kpi/tech-leads @sc-kpi/backend
+
+# Database migrations (requires tech lead approval)
+**/db/migration/                        @sc-kpi/tech-leads @sc-kpi/backend
+
+# Tests
+**/test/                                @sc-kpi/backend @sc-kpi/qa-automation
+
+# Configuration and infrastructure
+/.github/                               @sc-kpi/devops @sc-kpi/tech-leads
+Dockerfile                              @sc-kpi/devops
+docker-compose*.yml                     @sc-kpi/devops
+build.gradle                            @sc-kpi/backend @sc-kpi/devops
+settings.gradle                         @sc-kpi/backend @sc-kpi/devops
+gradle.properties                       @sc-kpi/backend @sc-kpi/devops
+
+# Application configuration
+**/application*.yml                     @sc-kpi/backend @sc-kpi/devops
+**/application*.yaml                    @sc-kpi/backend @sc-kpi/devops
+**/application*.properties              @sc-kpi/backend @sc-kpi/devops
+
+# Documentation
+*.md                                    @sc-kpi/management
+/docs/                                  @sc-kpi/management @sc-kpi/tech-leads
+CHANGELOG.md                            @sc-kpi/management @sc-kpi/devops

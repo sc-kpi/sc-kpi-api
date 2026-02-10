@@ -1,0 +1,91 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sc-kpi-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      SERVER_PORT: 8080
+      # Datasource (compose-internal hostname)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-sc_kpi}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-sc_kpi_user}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-sc_kpi_pass}
+      # Redis (compose-internal hostname)
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      # App config
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_ACCESS_EXPIRATION: ${JWT_ACCESS_EXPIRATION:-3600000}
+      JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION:-2592000000}
+      JWT_REMEMBER_ME_REFRESH_EXPIRATION: ${JWT_REMEMBER_ME_REFRESH_EXPIRATION:-7776000000}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      API_BASE_URL: ${API_BASE_URL:-https://api.sc.kpi.ua}
+      APP_CONTACT_URL: ${APP_CONTACT_URL:-https://sc.kpi.ua}
+      BCRYPT_STRENGTH: ${BCRYPT_STRENGTH:-12}
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - sc-kpi-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: sc-kpi-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sc_kpi}
+      POSTGRES_USER: ${POSTGRES_USER:-sc_kpi_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sc_kpi_pass}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sc_kpi_user} -d ${POSTGRES_DB:-sc_kpi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - sc-kpi-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: sc-kpi-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - sc-kpi-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  sc-kpi-network:
+    driver: bridge
