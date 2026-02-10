@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- Spring Boot entry points have a main method in a non-utility class -->
+    <suppress checks="HideUtilityClassConstructor" files=".*Application\.java"/>
+
+    <!-- module-info.java does not follow standard naming/structure rules -->
+    <suppress checks=".*" files="module-info\.java"/>
+
+    <!-- Test methods use underscores: methodName_scenario_expected -->
+    <suppress checks="MethodName" files=".*Test\.java"/>
+</suppressions>

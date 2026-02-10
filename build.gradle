@@ -1,0 +1,85 @@
+plugins {
+    id 'java'
+    id 'checkstyle'
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+allprojects {
+    group = 'ua.kpi.sc'
+    version = '0.1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'checkstyle'
+    apply plugin: 'jacoco'
+
+    checkstyle {
+        toolVersion = '10.21.4'
+        configDirectory = rootProject.layout.projectDirectory.dir('config/checkstyle')
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
+        }
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.compilerArgs += ['-parameters', '-proc:full']
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    jacoco {
+        toolVersion = '0.8.13'
+    }
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.required = true
+            html.required = true
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        dependsOn jacocoTestReport
+        violationRules {
+            rule {
+                limit {
+                    counter = 'LINE'
+                    minimum = 0.80
+                }
+            }
+        }
+    }
+
+    tasks.named('check') {
+        dependsOn jacocoTestCoverageVerification
+    }
+}

@@ -1,0 +1,10 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,beans,configprops,mappings,scheduledtasks,conditions
+  endpoint:
+    health:
+      show-details: always
+    env:
+      show-values: WHEN_AUTHORIZED

@@ -1,0 +1,15 @@
+.git
+.github
+.gradle
+.idea
+.claude
+.env
+.env.*
+*.md
+build/
+*/build/
+docs/
+uploads/
+logs/
+*.log
+*.iml
