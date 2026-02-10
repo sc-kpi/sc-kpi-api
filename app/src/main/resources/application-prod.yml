@@ -1,0 +1,10 @@
+logging:
+  level:
+    ua.kpi.sc: WARN
+    org.springframework: WARN
+
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false

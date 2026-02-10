@@ -1,0 +1,3 @@
+logging:
+  level:
+    ua.kpi.sc: DEBUG
