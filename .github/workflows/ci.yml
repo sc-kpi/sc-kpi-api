@@ -100,8 +100,8 @@ jobs:
           path: '**/build/reports/jacoco/'
           retention-days: 7
 
-  smoke-tests:
-    name: smoke-tests
+  integration-smoke-tests:
+    name: integration-smoke-tests
     needs: [build, unit-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -150,7 +150,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-allure-results
+          name: integration-smoke-allure-results
           path: api-tests/build/allure-results/
           retention-days: 7
 
@@ -158,7 +158,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-test-reports
+          name: integration-smoke-test-reports
           path: api-tests/build/reports/tests/
           retention-days: 7
 
