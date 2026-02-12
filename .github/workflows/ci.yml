@@ -125,7 +125,7 @@ jobs:
           path: api-tests
 
       - name: Start services
-        run: docker compose up -d --build --wait --wait-timeout 120
+        run: docker compose up -d --build --wait --wait-timeout 180
         env:
           SPRING_PROFILES_ACTIVE: dev
           JWT_SECRET: ci-dummy-jwt-secret-that-is-long-enough-for-hmac

@@ -40,7 +40,7 @@ services:
       test: ["CMD-SHELL", "wget --quiet --spider http://localhost:8080/actuator/health || exit 1"]
       interval: 30s
       timeout: 5s
-      start_period: 30s
+      start_period: 60s
       retries: 3
     restart: unless-stopped
     networks:
