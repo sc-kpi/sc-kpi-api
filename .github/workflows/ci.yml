@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -100,6 +101,14 @@ jobs:
           path: '**/build/reports/jacoco/'
           retention-days: 7
 
+      - name: Publish Unit Test results
+        if: always() && github.event_name == 'pull_request'
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: '**/build/test-results/test/**/*.xml'
+          check_name: Unit Test Results
+          comment_title: Unit Tests
+
   integration-smoke-tests:
     name: integration-smoke-tests
     needs: [build, unit-tests]
@@ -161,6 +170,14 @@ jobs:
           name: integration-smoke-test-reports
           path: api-tests/build/reports/tests/
           retention-days: 7
+
+      - name: Publish API Smoke Test results
+        if: always() && github.event_name == 'pull_request'
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: api-tests/build/test-results/test/**/*.xml
+          check_name: Integration Smoke Test Results
+          comment_title: API Smoke Tests
 
       - name: Dump API logs on failure
         if: failure()

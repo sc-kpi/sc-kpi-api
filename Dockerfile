@@ -31,8 +31,8 @@ RUN --mount=type=cache,target=/root/.gradle \
 # ── Extract stage (Spring Boot layered JAR) ───────────────────
 FROM eclipse-temurin:25-jdk-alpine AS extract
 WORKDIR /app
-COPY --from=build /app/app/build/libs/sc-kpi-api.jar app.jar
-RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
+COPY --from=build /app/app/build/libs/sc-kpi-api.jar application.jar
+RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
 # ── Runtime stage ─────────────────────────────────────────────
 FROM eclipse-temurin:25-jre-alpine
@@ -63,4 +63,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
 ENTRYPOINT ["java", \
     "-XX:MaxRAMPercentage=75.0", \
     "-XX:+UseZGC", \
-    "-jar", "app.jar"]
+    "-jar", "application.jar"]
