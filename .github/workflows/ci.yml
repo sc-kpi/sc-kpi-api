@@ -109,12 +109,17 @@ jobs:
           files: '**/build/test-results/test/**/*.xml'
           check_name: Unit Test Results
           comment_title: Unit Tests
+          commit: ${{ github.event.pull_request.head.sha }}
 
   integration-smoke-tests:
     name: integration-smoke-tests
     needs: [build, unit-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -182,6 +187,70 @@ jobs:
           files: api-tests/build/test-results/test/**/*.xml
           check_name: Integration Smoke Test Results
           comment_title: API Smoke Tests
+          commit: ${{ github.event.pull_request.head.sha }}
+
+      - name: Checkout gh-pages for Allure history
+        if: always()
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true
+
+      - name: Generate Allure report
+        if: always()
+        uses: simple-elf/allure-report-action@v1.13
+        with:
+          allure_results: api-tests/build/allure-results
+          allure_report: allure-report
+          gh_pages: gh-pages
+          allure_history: allure-history
+
+      - name: Deploy Allure report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      - name: Post Allure report link on PR
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const reportUrl = 'https://sc-kpi.github.io/sc-kpi-api/';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const marker = '<!-- allure-report-comment -->';
+            const body = [
+              marker,
+              '## :bar_chart: Allure Test Report',
+              '',
+              `**Report:** ${reportUrl}`,
+              `**Workflow run:** ${runUrl}`,
+              `_Updated: ${new Date().toISOString()}_`,
+            ].join('\n');
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
 
       - name: Dump API logs on failure
         if: failure()
