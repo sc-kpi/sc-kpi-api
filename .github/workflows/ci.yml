@@ -124,11 +124,14 @@ jobs:
           repository: sc-kpi/sc-kpi-api-tests
           path: api-tests
 
+      - name: Generate JWT secret
+        run: echo "JWT_SECRET=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+
       - name: Start services
         run: docker compose up -d --build --wait --wait-timeout 180
         env:
           SPRING_PROFILES_ACTIVE: dev
-          JWT_SECRET: ci-dummy-jwt-secret-that-is-long-enough-for-hmac
+          JWT_SECRET: ${{ env.JWT_SECRET }}
 
       - name: Wait for API health
         run: |
