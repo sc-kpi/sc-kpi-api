@@ -1,0 +1,260 @@
+<div>Status code 200 </div>
+
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;openapi&quot;: &quot;3.1.0&quot;,
+    &quot;info&quot;: {
+        &quot;title&quot;: &quot;Student Council KPI API&quot;,
+        &quot;description&quot;: &quot;Student Council of KPI - Backend API&quot;,
+        &quot;contact&quot;: {
+            &quot;name&quot;: &quot;DCT Team&quot;,
+            &quot;url&quot;: &quot;https://sc.kpi.ua&quot;
+        },
+        &quot;version&quot;: &quot;1.0.0&quot;
+    },
+    &quot;servers&quot;: [
+        {
+            &quot;url&quot;: &quot;http://localhost:8080&quot;,
+            &quot;description&quot;: &quot;Generated server url&quot;
+        }
+    ],
+    &quot;security&quot;: [
+        {
+            &quot;bearerAuth&quot;: [
+                
+            ]
+        }
+    ],
+    &quot;tags&quot;: [
+        {
+            &quot;name&quot;: &quot;Authentication&quot;,
+            &quot;description&quot;: &quot;Authentication endpoints&quot;
+        }
+    ],
+    &quot;paths&quot;: {
+        &quot;/api/v1/auth/register&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Register a new user&quot;,
+                &quot;operationId&quot;: &quot;register&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/RegisterRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/refresh&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Refresh access token using refresh token cookie&quot;,
+                &quot;operationId&quot;: &quot;refresh&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/logout&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Log out and clear tokens&quot;,
+                &quot;operationId&quot;: &quot;logout&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/login&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Authenticate with email and password&quot;,
+                &quot;operationId&quot;: &quot;login&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/LoginRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/me&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Get current authenticated user info&quot;,
+                &quot;operationId&quot;: &quot;getMe&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    &quot;components&quot;: {
+        &quot;schemas&quot;: {
+            &quot;RegisterRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[\\p{L}\\p{M}\\s&#39;.\\-]+$&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[\\p{L}\\p{M}\\s&#39;.\\-]+$&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;firstName&quot;,
+                    &quot;lastName&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;AuthUserResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    }
+                }
+            },
+            &quot;LoginRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;password&quot;
+                ]
+            }
+        },
+        &quot;securitySchemes&quot;: {
+            &quot;bearerAuth&quot;: {
+                &quot;type&quot;: &quot;http&quot;,
+                &quot;scheme&quot;: &quot;bearer&quot;,
+                &quot;bearerFormat&quot;: &quot;JWT&quot;
+            }
+        }
+    }
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>X-Frame-Options: DENY</div>
+        <div>Keep-Alive: timeout=60</div>
+        <div>Cache-Control: no-cache, no-store, max-age=0, must-revalidate</div>
+        <div>X-Content-Type-Options: nosniff</div>
+        <div>Connection: keep-alive</div>
+        <div>Vary: Access-Control-Request-Headers</div>
+        <div>Pragma: no-cache</div>
+        <div>Expires: 0</div>
+        <div>X-XSS-Protection: 0</div>
+        <div>Content-Length: 2719</div>
+        <div>Date: Thu, 12 Feb 2026 18:59:12 GMT</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+

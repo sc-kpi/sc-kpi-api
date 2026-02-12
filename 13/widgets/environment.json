@@ -1,0 +1,1 @@
+[{"values":["false"],"name":"Auth Enabled"},{"values":["http://localhost:8080"],"name":"Base URL"},{"values":["25.0.2"],"name":"Java Version"},{"values":["Linux"],"name":"OS"},{"values":["none"],"name":"Parallel Mode"},{"values":["5"],"name":"Thread Count"},{"values":["45000"],"name":"Timeout"}]
