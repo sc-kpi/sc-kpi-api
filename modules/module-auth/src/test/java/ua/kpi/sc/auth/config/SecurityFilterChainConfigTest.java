@@ -24,6 +24,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import ua.kpi.sc.auth.security.JwtAuthenticationFilter;
 import ua.kpi.sc.common.security.handler.ProblemDetailAccessDeniedHandler;
 import ua.kpi.sc.common.security.handler.ProblemDetailAuthenticationEntryPoint;
 
@@ -37,7 +38,9 @@ class SecurityFilterChainConfigTest {
         corsProperties = new CorsProperties();
         var accessDeniedHandler = mock(ProblemDetailAccessDeniedHandler.class);
         var authenticationEntryPoint = mock(ProblemDetailAuthenticationEntryPoint.class);
-        config = new SecurityFilterChainConfig(corsProperties, accessDeniedHandler, authenticationEntryPoint);
+        var jwtAuthenticationFilter = mock(JwtAuthenticationFilter.class);
+        config = new SecurityFilterChainConfig(corsProperties, accessDeniedHandler,
+                authenticationEntryPoint, jwtAuthenticationFilter);
         ReflectionTestUtils.setField(config, "bcryptStrength", 10);
     }
 
@@ -52,6 +55,7 @@ class SecurityFilterChainConfigTest {
         when(http.sessionManagement(any(Customizer.class))).thenReturn(http);
         when(http.authorizeHttpRequests(any(Customizer.class))).thenReturn(http);
         when(http.exceptionHandling(any(Customizer.class))).thenReturn(http);
+        when(http.addFilterBefore(any(), any())).thenReturn(http);
         when(http.build()).thenReturn(expectedChain);
 
         var chain = config.filterChain(http);

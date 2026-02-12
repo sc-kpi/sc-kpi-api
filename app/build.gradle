@@ -21,12 +21,23 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.h2database:h2'
+
+    // Workaround: swagger-core requires Jackson 2 classes (awaiting upstream Jackson 3 migration)
+    // See: https://github.com/springdoc/springdoc-openapi/issues/3200
+    runtimeOnly 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+    runtimeOnly 'com.fasterxml.jackson.core:jackson-core:2.18.2'
+    runtimeOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.2'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.h2database:h2'
 }
 
 bootJar {

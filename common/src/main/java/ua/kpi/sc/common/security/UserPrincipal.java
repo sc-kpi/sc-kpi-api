@@ -28,6 +28,8 @@ public class UserPrincipal implements UserDetails {
     private final UUID id;
     private final String email;
     private final String password;
+    private final String firstName;
+    private final String lastName;
     @Builder.Default
     private final CapabilityTier tier = CapabilityTier.GUEST;
     private final boolean active;

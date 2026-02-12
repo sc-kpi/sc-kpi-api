@@ -14,9 +14,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import ua.kpi.sc.auth.security.JwtAuthenticationFilter;
 import ua.kpi.sc.common.security.handler.ProblemDetailAccessDeniedHandler;
 import ua.kpi.sc.common.security.handler.ProblemDetailAuthenticationEntryPoint;
 
@@ -28,8 +30,9 @@ import ua.kpi.sc.common.security.handler.ProblemDetailAuthenticationEntryPoint;
  *   <li>CSRF disabled (stateless JWT-based API)</li>
  *   <li>CORS configured via {@link CorsProperties}</li>
  *   <li>Stateless session management</li>
- *   <li>All requests are currently {@code permitAll()} — this is temporary
- *       and will be replaced with proper URL-level authorization rules</li>
+ *   <li>JWT authentication filter before UsernamePasswordAuthenticationFilter</li>
+ *   <li>Public URLs: auth login/register/refresh, clubs, projects, departments, swagger, health</li>
+ *   <li>All other requests require authentication</li>
  *   <li>RFC 9457 error responses for 401/403 via custom handlers</li>
  * </ul>
  *
@@ -45,6 +48,7 @@ public class SecurityFilterChainConfig {
     private final CorsProperties corsProperties;
     private final ProblemDetailAccessDeniedHandler accessDeniedHandler;
     private final ProblemDetailAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Value("${app.security.bcrypt-strength}")
     private int bcryptStrength;
@@ -56,12 +60,28 @@ public class SecurityFilterChainConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/register",
+                                "/api/v1/auth/refresh"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/clubs", "/api/v1/clubs/**",
+                                "/api/v1/projects", "/api/v1/projects/**",
+                                "/api/v1/departments", "/api/v1/departments/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**", "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/actuator/health"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint)
                 )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
