@@ -206,6 +206,10 @@ jobs:
           gh_pages: gh-pages
           allure_history: allure-history
 
+      - name: Fix Allure report permissions
+        if: always()
+        run: sudo rm -rf allure-history/.git
+
       - name: Deploy Allure report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v4
