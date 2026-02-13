@@ -28,6 +28,12 @@ services:
       API_BASE_URL: ${API_BASE_URL:-https://api.sc.kpi.ua}
       APP_CONTACT_URL: ${APP_CONTACT_URL:-https://sc.kpi.ua}
       BCRYPT_STRENGTH: ${BCRYPT_STRENGTH:-12}
+      # Google OAuth 2.0
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      # Mail (compose-internal hostname)
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
     ports:
       - "${SERVER_PORT:-8080}:8080"
     deploy:
@@ -78,6 +84,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
+    networks:
+      - sc-kpi-network
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: sc-kpi-mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
     restart: unless-stopped
     networks:
       - sc-kpi-network

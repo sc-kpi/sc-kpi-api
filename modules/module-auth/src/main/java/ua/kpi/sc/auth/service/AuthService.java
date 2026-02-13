@@ -23,6 +23,7 @@ import ua.kpi.sc.auth.repository.RefreshTokenRepository;
 import ua.kpi.sc.auth.security.JwtTokenProvider;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.util.InputSanitizer;
+import ua.kpi.sc.common.util.PasswordValidator;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
 import ua.kpi.sc.common.exception.UnauthorizedException;
 import ua.kpi.sc.common.security.UserDetailsPort;
@@ -46,6 +47,7 @@ public class AuthService {
 
     @Transactional
     public AuthResult register(RegisterRequest request) {
+        PasswordValidator.validateLength(request.password());
         if (userDetailsPort.existsByEmail(request.email())) {
             throw new ConflictException("Email already registered");
         }
@@ -63,6 +65,10 @@ public class AuthService {
     public AuthResult login(LoginRequest request) {
         UserPrincipal principal = userDetailsPort.loadByEmail(request.email())
                 .orElseThrow(() -> new UnauthorizedException("Invalid email or password"));
+
+        if (principal.getPassword() == null) {
+            throw new UnauthorizedException("This account uses social login. Please sign in with Google.");
+        }
 
         if (!passwordEncoder.matches(request.password(), principal.getPassword())) {
             throw new UnauthorizedException("Invalid email or password");
@@ -111,7 +117,7 @@ public class AuthService {
         return toResponse(principal);
     }
 
-    private AuthResult createAuthResult(UserPrincipal principal) {
+    AuthResult createAuthResult(UserPrincipal principal) {
         String accessToken = jwtTokenProvider.generateAccessToken(principal);
         String refreshTokenValue = jwtTokenProvider.generateRefreshToken();
 
@@ -140,7 +146,7 @@ public class AuthService {
         );
     }
 
-    static String hashToken(String token) {
+    public static String hashToken(String token) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(token.getBytes(StandardCharsets.UTF_8));

@@ -43,7 +43,7 @@ public interface UserDetailsPort {
      * Creates a new user with the given credentials and profile information.
      *
      * @param email        the user's email (must be unique)
-     * @param passwordHash the BCrypt-hashed password
+     * @param passwordHash the BCrypt-hashed password, or {@code null} for OAuth-only accounts
      * @param firstName    the user's first name
      * @param lastName     the user's last name
      * @return the created user principal

@@ -136,6 +136,20 @@ class AuthServiceTest {
         }
 
         @Test
+        void loginOAuthOnlyUserNullPasswordThrowsUnauthorized() {
+            LoginRequest request = new LoginRequest("oauth@kpi.ua", "password123");
+            UserPrincipal oauthPrincipal = UserPrincipal.builder()
+                    .id(USER_ID).email("oauth@kpi.ua").password(null)
+                    .firstName("OAuth").lastName("User")
+                    .tier(CapabilityTier.BASIC).active(true).build();
+            when(userDetailsPort.loadByEmail("oauth@kpi.ua")).thenReturn(Optional.of(oauthPrincipal));
+
+            assertThatThrownBy(() -> authService.login(request))
+                    .isInstanceOf(UnauthorizedException.class)
+                    .hasMessageContaining("social login");
+        }
+
+        @Test
         void loginDisabledAccountThrowsUnauthorized() {
             LoginRequest request = new LoginRequest("test@kpi.ua", "password123");
             UserPrincipal disabled = UserPrincipal.builder()

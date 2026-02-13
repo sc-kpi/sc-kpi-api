@@ -64,8 +64,11 @@ public class SecurityFilterChainConfig {
                         .requestMatchers(
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/register",
-                                "/api/v1/auth/refresh"
+                                "/api/v1/auth/refresh",
+                                "/api/v1/auth/forgot-password",
+                                "/api/v1/auth/reset-password"
                         ).permitAll()
+                        .requestMatchers("/api/v1/auth/oauth2/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/clubs", "/api/v1/clubs/**",
                                 "/api/v1/projects", "/api/v1/projects/**",
