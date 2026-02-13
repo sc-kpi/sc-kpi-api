@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ua.kpi.sc.user.entity.User;
 
 /**
@@ -11,7 +12,7 @@ import ua.kpi.sc.user.entity.User;
  *
  * @since 0.1.0
  */
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByEmail(String email);
 

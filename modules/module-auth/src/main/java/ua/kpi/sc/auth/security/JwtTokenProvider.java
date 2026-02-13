@@ -2,7 +2,9 @@ package ua.kpi.sc.auth.security;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
@@ -37,11 +39,19 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtProperties.getAccessExpiration());
 
+        Map<String, Object> contexts = Map.of(
+                "partners", principal.getPartnerRoles().entrySet().stream()
+                        .collect(Collectors.toMap(
+                                e -> e.getKey().toString(),
+                                e -> e.getValue().getValue()))
+        );
+
         return Jwts.builder()
                 .id(UUID.randomUUID().toString())
                 .subject(principal.getId().toString())
                 .claim("email", principal.getEmail())
                 .claim("tier", principal.getTier().getLevel())
+                .claim("contexts", contexts)
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(secretKey)

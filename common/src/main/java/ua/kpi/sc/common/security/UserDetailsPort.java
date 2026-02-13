@@ -57,4 +57,48 @@ public interface UserDetailsPort {
      * @param passwordHash the new BCrypt-hashed password
      */
     void updatePassword(UUID userId, String passwordHash);
+
+    /**
+     * Assigns a partner access level to a user.
+     *
+     * @param userId     the user's UUID
+     * @param partnerId  the partner organization UUID
+     * @param level      the access level to assign
+     * @param assignedBy the UUID of the admin performing the assignment
+     */
+    void assignPartnerLevel(UUID userId, UUID partnerId, PartnerLevel level, UUID assignedBy);
+
+    /**
+     * Removes a user's partner access level.
+     *
+     * @param userId    the user's UUID
+     * @param partnerId the partner organization UUID
+     */
+    void removePartnerLevel(UUID userId, UUID partnerId);
+
+    /**
+     * Updates a user's capability tier.
+     *
+     * @param userId the user's UUID
+     * @param tier   the new capability tier
+     */
+    void updateUserTier(UUID userId, CapabilityTier tier);
+
+    /**
+     * Updates a user's active status.
+     *
+     * @param userId the user's UUID
+     * @param active whether the user should be active
+     */
+    void updateUserActiveStatus(UUID userId, boolean active);
+
+    /**
+     * Updates a user's profile fields (first name, last name).
+     *
+     * @param userId    the user's UUID
+     * @param firstName the new first name
+     * @param lastName  the new last name
+     * @return the updated principal if found, or empty
+     */
+    Optional<UserPrincipal> updateUserProfile(UUID userId, String firstName, String lastName);
 }
