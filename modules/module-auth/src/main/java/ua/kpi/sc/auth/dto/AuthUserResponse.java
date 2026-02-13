@@ -1,5 +1,6 @@
 package ua.kpi.sc.auth.dto;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -13,6 +14,16 @@ public record AuthUserResponse(
         String email,
         String firstName,
         String lastName,
-        int capabilityTier
+        int capabilityTier,
+        List<PartnerRoleDto> partnerRoles
 ) {
+
+    /**
+     * Partner role assignment for the authenticated user.
+     *
+     * @param partnerId the partner organization UUID
+     * @param level     the access level (full, documents, basic)
+     */
+    public record PartnerRoleDto(UUID partnerId, String level) {
+    }
 }

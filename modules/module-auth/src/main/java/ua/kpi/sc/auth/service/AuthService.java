@@ -7,6 +7,8 @@ import java.time.Instant;
 import java.util.HexFormat;
 import java.util.UUID;
 
+import ua.kpi.sc.auth.dto.AuthUserResponse.PartnerRoleDto;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -124,12 +126,17 @@ public class AuthService {
     }
 
     private AuthUserResponse toResponse(UserPrincipal principal) {
+        var partnerRoles = principal.getPartnerRoles().entrySet().stream()
+                .map(e -> new PartnerRoleDto(e.getKey(), e.getValue().getValue()))
+                .toList();
+
         return new AuthUserResponse(
                 principal.getId(),
                 principal.getEmail(),
                 principal.getFirstName(),
                 principal.getLastName(),
-                principal.getTier().getLevel()
+                principal.getTier().getLevel(),
+                partnerRoles
         );
     }
 

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -65,7 +66,7 @@ public class SecurityFilterChainConfig {
                                 "/api/v1/auth/register",
                                 "/api/v1/auth/refresh"
                         ).permitAll()
-                        .requestMatchers(
+                        .requestMatchers(HttpMethod.GET,
                                 "/api/v1/clubs", "/api/v1/clubs/**",
                                 "/api/v1/projects", "/api/v1/projects/**",
                                 "/api/v1/departments", "/api/v1/departments/**"

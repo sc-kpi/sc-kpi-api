@@ -2,6 +2,7 @@ package ua.kpi.sc.common.security;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import lombok.Builder;
@@ -33,6 +34,8 @@ public class UserPrincipal implements UserDetails {
     @Builder.Default
     private final CapabilityTier tier = CapabilityTier.GUEST;
     private final boolean active;
+    @Builder.Default
+    private final Map<UUID, PartnerLevel> partnerRoles = Map.of();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
