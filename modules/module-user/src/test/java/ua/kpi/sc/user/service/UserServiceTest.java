@@ -283,6 +283,22 @@ class UserServiceTest {
     }
 
     @Test
+    void changePassword_tooLongPassword_throwsBadRequest() {
+        String longPassword = "A".repeat(73);
+
+        assertThatThrownBy(() -> userService.changePassword(USER_ID, "oldPass", longPassword))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("Password must be between 8 and 72 characters");
+    }
+
+    @Test
+    void changePassword_tooShortPassword_throwsBadRequest() {
+        assertThatThrownBy(() -> userService.changePassword(USER_ID, "oldPass", "short"))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("Password must be between 8 and 72 characters");
+    }
+
+    @Test
     void assignPartnerLevel_success() {
         var request = new AssignPartnerLevelRequest(PARTNER_ID, "full");
         when(userRepository.existsById(USER_ID)).thenReturn(true);

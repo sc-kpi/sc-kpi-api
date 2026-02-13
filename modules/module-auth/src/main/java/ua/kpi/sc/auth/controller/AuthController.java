@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.sc.auth.config.JwtProperties;
 import ua.kpi.sc.auth.dto.AuthUserResponse;
+import ua.kpi.sc.auth.dto.ForgotPasswordRequest;
 import ua.kpi.sc.auth.dto.LoginRequest;
 import ua.kpi.sc.auth.dto.RegisterRequest;
+import ua.kpi.sc.auth.dto.ResetPasswordRequest;
 import ua.kpi.sc.auth.service.AuthService;
+import ua.kpi.sc.auth.service.PasswordResetService;
 import ua.kpi.sc.auth.util.CookieUtil;
 import ua.kpi.sc.common.security.SecurityConstants;
 import ua.kpi.sc.common.security.UserPrincipal;
@@ -36,6 +39,7 @@ import ua.kpi.sc.common.security.UserPrincipal;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
     private final JwtProperties jwtProperties;
 
     @PostMapping("/register")
@@ -80,6 +84,20 @@ public class AuthController {
     public ResponseEntity<AuthUserResponse> getMe(@AuthenticationPrincipal UserPrincipal principal) {
         AuthUserResponse response = authService.getMe(principal.getId());
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Request a password reset email")
+    public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        passwordResetService.requestPasswordReset(request.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset password using a token from email")
+    public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request.token(), request.newPassword());
+        return ResponseEntity.ok().build();
     }
 
     private HttpHeaders createTokenHeaders(AuthService.AuthResult result) {

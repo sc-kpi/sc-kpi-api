@@ -17,6 +17,7 @@ import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.PartnerLevel;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.common.util.InputSanitizer;
+import ua.kpi.sc.common.util.PasswordValidator;
 import ua.kpi.sc.user.dto.AssignPartnerLevelRequest;
 import ua.kpi.sc.user.dto.CreateUserRequest;
 import ua.kpi.sc.user.dto.PartnerMemberResponse;
@@ -71,6 +72,7 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(CreateUserRequest request, UserPrincipal requester) {
+        PasswordValidator.validateLength(request.password());
         if (userRepository.existsByEmail(request.email())) {
             throw new ConflictException("Email already registered");
         }
@@ -166,6 +168,7 @@ public class UserService {
 
     @Transactional
     public void changePassword(UUID userId, String currentPassword, String newPassword) {
+        PasswordValidator.validateLength(newPassword);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 

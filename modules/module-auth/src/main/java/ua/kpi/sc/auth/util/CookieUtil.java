@@ -22,22 +22,30 @@ public final class CookieUtil {
     }
 
     public static ResponseCookie createDeleteCookie(String name) {
+        return createDeleteCookie(name, "/");
+    }
+
+    public static ResponseCookie createDeleteCookie(String name, String path) {
         return ResponseCookie.from(name, "")
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .path("/")
+                .path(path)
                 .maxAge(0)
                 .build();
     }
 
-    private static ResponseCookie buildCookie(String name, String value, long maxAgeSec) {
+    public static ResponseCookie buildCookie(String name, String value, long maxAgeSec, String path) {
         return ResponseCookie.from(name, value)
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .path("/")
+                .path(path)
                 .maxAge(maxAgeSec)
                 .build();
+    }
+
+    private static ResponseCookie buildCookie(String name, String value, long maxAgeSec) {
+        return buildCookie(name, value, maxAgeSec, "/");
     }
 }
