@@ -61,6 +61,7 @@ public class UserDetailsAdapter implements UserDetailsPort {
     }
 
     @Override
+    @Transactional
     public void updatePassword(UUID userId, String passwordHash) {
         userRepository.findById(userId).ifPresent(user -> {
             user.setPasswordHash(passwordHash);
