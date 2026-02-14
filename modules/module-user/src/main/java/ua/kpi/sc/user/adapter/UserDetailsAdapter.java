@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.sc.common.security.CapabilityTier;
@@ -23,6 +24,7 @@ import ua.kpi.sc.user.repository.UserRepository;
  *
  * @since 0.1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UserDetailsAdapter implements UserDetailsPort {
@@ -62,10 +64,10 @@ public class UserDetailsAdapter implements UserDetailsPort {
 
     @Override
     public void updatePassword(UUID userId, String passwordHash) {
-        userRepository.findById(userId).ifPresent(user -> {
-            user.setPasswordHash(passwordHash);
-            userRepository.save(user);
-        });
+        int updated = userRepository.updatePasswordById(userId, passwordHash);
+        if (updated == 0) {
+            log.warn("Password update affected 0 rows for userId={}", userId);
+        }
     }
 
     @Override
