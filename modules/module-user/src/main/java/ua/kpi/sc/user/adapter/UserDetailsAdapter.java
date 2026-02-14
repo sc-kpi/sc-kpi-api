@@ -63,6 +63,7 @@ public class UserDetailsAdapter implements UserDetailsPort {
     }
 
     @Override
+    @Transactional
     public void updatePassword(UUID userId, String passwordHash) {
         int updated = userRepository.updatePasswordById(userId, passwordHash);
         if (updated == 0) {
