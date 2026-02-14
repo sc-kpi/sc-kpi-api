@@ -120,13 +120,11 @@ class UserDetailsAdapterTest {
 
     @Test
     void updatePasswordUpdatesUser() {
-        User user = testUser();
-        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.updatePasswordById(USER_ID, "$2a$12$newHash")).thenReturn(1);
 
         adapter.updatePassword(USER_ID, "$2a$12$newHash");
 
-        verify(userRepository).save(any(User.class));
+        verify(userRepository).updatePasswordById(USER_ID, "$2a$12$newHash");
     }
 
     @Test
