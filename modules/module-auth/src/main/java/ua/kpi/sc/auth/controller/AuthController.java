@@ -90,14 +90,14 @@ public class AuthController {
     @Operation(summary = "Request a password reset email")
     public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         passwordResetService.requestPasswordReset(request.email());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/reset-password")
     @Operation(summary = "Reset password using a token from email")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         passwordResetService.resetPassword(request.token(), request.newPassword());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     private HttpHeaders createTokenHeaders(AuthService.AuthResult result) {
