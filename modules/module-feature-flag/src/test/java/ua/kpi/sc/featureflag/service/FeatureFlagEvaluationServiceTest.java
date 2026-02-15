@@ -17,7 +17,10 @@ import ua.kpi.sc.featureflag.entity.OverrideType;
 import ua.kpi.sc.featureflag.repository.FeatureFlagRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
+
+import ua.kpi.sc.common.exception.ResourceNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 class FeatureFlagEvaluationServiceTest {
@@ -112,12 +115,11 @@ class FeatureFlagEvaluationServiceTest {
     }
 
     @Test
-    void evaluate_returnsFalseWhenNoFlagAndNoDefault() {
+    void evaluate_throwsNotFoundWhenNoFlagAndNoDefault() {
         when(flagRepository.findByKeyWithOverrides("missing.flag")).thenReturn(Optional.empty());
 
-        boolean result = service.evaluate("missing.flag", null, null);
-
-        assertThat(result).isFalse();
+        assertThatThrownBy(() -> service.evaluate("missing.flag", null, null))
+                .isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test

@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.sc.featureflag.config.FeatureFlagProperties;
+import ua.kpi.sc.common.exception.ResourceNotFoundException;
 import ua.kpi.sc.featureflag.entity.FeatureFlag;
 import ua.kpi.sc.featureflag.entity.FeatureFlagOverride;
 import ua.kpi.sc.featureflag.entity.OverrideType;
@@ -36,7 +37,11 @@ public class FeatureFlagEvaluationService {
         var flagOpt = flagRepository.findByKeyWithOverrides(key);
         if (flagOpt.isEmpty()) {
             // 6. Config file default (lowest priority)
-            return properties.getDefaults().getOrDefault(key, false);
+            Boolean configDefault = properties.getDefaults().get(key);
+            if (configDefault != null) {
+                return configDefault;
+            }
+            throw new ResourceNotFoundException("FeatureFlag", key);
         }
 
         FeatureFlag flag = flagOpt.get();

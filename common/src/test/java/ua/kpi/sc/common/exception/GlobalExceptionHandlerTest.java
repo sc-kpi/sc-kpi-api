@@ -18,6 +18,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -53,6 +54,21 @@ class GlobalExceptionHandlerTest {
         assertThat(body.getDetail()).isEqualTo("invalid field");
         assertThat(body.getTitle()).isEqualTo("Bad Request");
         assertThat(body.getType()).isEqualTo(URI.create("https://api.example.com/errors/400"));
+        assertThat(body.getInstance()).isEqualTo(URI.create("/api/v1/test"));
+    }
+
+    @Test
+    void handleAccessDeniedException_returns403WithTypeAndInstance() {
+        var ex = new AccessDeniedException("Access denied");
+
+        ResponseEntity<Object> response = handler.handleAccessDeniedException(ex, webRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        ProblemDetail body = (ProblemDetail) response.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body.getTitle()).isEqualTo("Forbidden");
+        assertThat(body.getDetail()).isEqualTo("Access denied");
+        assertThat(body.getType()).isEqualTo(URI.create("https://api.example.com/errors/403"));
         assertThat(body.getInstance()).isEqualTo(URI.create("/api/v1/test"));
     }
 
