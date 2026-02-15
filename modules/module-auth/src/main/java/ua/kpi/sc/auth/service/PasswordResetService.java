@@ -12,6 +12,10 @@ import ua.kpi.sc.auth.config.PasswordResetProperties;
 import ua.kpi.sc.auth.entity.PasswordResetToken;
 import ua.kpi.sc.auth.repository.PasswordResetTokenRepository;
 import ua.kpi.sc.auth.repository.RefreshTokenRepository;
+import ua.kpi.sc.common.audit.AuditAction;
+import ua.kpi.sc.common.audit.AuditEntityType;
+import ua.kpi.sc.common.audit.AuditEventBuilder;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.util.PasswordValidator;
 import ua.kpi.sc.common.security.UserDetailsPort;
@@ -33,6 +37,7 @@ public class PasswordResetService {
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetProperties properties;
     private final EmailService emailService;
+    private final AuditPublisher auditPublisher;
 
     /**
      * Initiates a password reset for the given email.
@@ -71,6 +76,16 @@ public class PasswordResetService {
         // Send email asynchronously
         String resetLink = properties.getBaseUrl() + "/reset-password?token=" + rawToken;
         emailService.sendPasswordResetEmail(email, resetLink);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actorId(principal.getId())
+                .actorEmail(principal.getEmail())
+                .action(AuditAction.PASSWORD_RESET_REQUESTED)
+                .entityType(AuditEntityType.AUTH)
+                .entityId(principal.getId())
+                .entityName(principal.getEmail())
+                .sourceModule("auth")
+                .build());
     }
 
     /**
@@ -99,6 +114,14 @@ public class PasswordResetService {
 
         // Delete the used reset token
         passwordResetTokenRepository.delete(resetToken);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actorId(resetToken.getUserId())
+                .action(AuditAction.PASSWORD_RESET_COMPLETED)
+                .entityType(AuditEntityType.AUTH)
+                .entityId(resetToken.getUserId())
+                .sourceModule("auth")
+                .build());
 
         log.info("Password reset completed for user {}", resetToken.getUserId());
     }

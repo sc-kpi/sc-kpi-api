@@ -25,7 +25,6 @@ import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.featureflag.dto.BulkToggleRequest;
 import ua.kpi.sc.featureflag.dto.CreateFeatureFlagRequest;
 import ua.kpi.sc.featureflag.dto.CreateOverrideRequest;
-import ua.kpi.sc.featureflag.dto.FeatureFlagAuditLogResponse;
 import ua.kpi.sc.featureflag.dto.FeatureFlagResponse;
 import ua.kpi.sc.featureflag.dto.OverrideResponse;
 import ua.kpi.sc.featureflag.dto.ToggleFeatureFlagRequest;
@@ -108,15 +107,4 @@ public class FeatureFlagAdminController {
         return featureFlagService.bulkToggle(request, requester);
     }
 
-    @GetMapping("/{id}/audit-log")
-    public Page<FeatureFlagAuditLogResponse> getAuditLog(
-            @PathVariable UUID id,
-            Pageable pageable) {
-        return featureFlagService.getAuditLog(id, pageable);
-    }
-
-    @GetMapping("/audit-log")
-    public Page<FeatureFlagAuditLogResponse> getAllAuditLogs(Pageable pageable) {
-        return featureFlagService.getAllAuditLogs(pageable);
-    }
 }

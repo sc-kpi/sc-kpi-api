@@ -15,6 +15,7 @@ import ua.kpi.sc.auth.config.JwtProperties;
 import ua.kpi.sc.auth.entity.RefreshToken;
 import ua.kpi.sc.auth.repository.RefreshTokenRepository;
 import ua.kpi.sc.auth.security.JwtTokenProvider;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
 import ua.kpi.sc.common.exception.UnauthorizedException;
@@ -44,6 +45,8 @@ class AuthServiceTest {
     private JwtTokenProvider jwtTokenProvider;
     @Mock
     private JwtProperties jwtProperties;
+    @Mock
+    private AuditPublisher auditPublisher;
 
     @InjectMocks
     private AuthService authService;

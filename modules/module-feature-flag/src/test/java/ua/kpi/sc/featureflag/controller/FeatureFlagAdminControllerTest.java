@@ -17,7 +17,6 @@ import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.featureflag.dto.BulkToggleRequest;
 import ua.kpi.sc.featureflag.dto.CreateFeatureFlagRequest;
 import ua.kpi.sc.featureflag.dto.CreateOverrideRequest;
-import ua.kpi.sc.featureflag.dto.FeatureFlagAuditLogResponse;
 import ua.kpi.sc.featureflag.dto.FeatureFlagResponse;
 import ua.kpi.sc.featureflag.dto.OverrideResponse;
 import ua.kpi.sc.featureflag.dto.ToggleFeatureFlagRequest;
@@ -177,35 +176,6 @@ class FeatureFlagAdminControllerTest {
 
         assertThat(result).hasSize(2);
         verify(featureFlagService).bulkToggle(request, principal);
-    }
-
-    @Test
-    void getAuditLog_forFlag_returnsPaginated() {
-        var pageable = PageRequest.of(0, 20);
-        var log = new FeatureFlagAuditLogResponse(
-                UUID.randomUUID(), FLAG_ID, "test.flag", "CREATED",
-                null, null, "true", null,
-                adminPrincipal().getId(), Instant.now()
-        );
-        var page = new PageImpl<>(List.of(log));
-        when(featureFlagService.getAuditLog(FLAG_ID, pageable)).thenReturn(page);
-
-        Page<FeatureFlagAuditLogResponse> result = controller.getAuditLog(FLAG_ID, pageable);
-
-        assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getContent().getFirst().action()).isEqualTo("CREATED");
-    }
-
-    @Test
-    void getAllAuditLogs_returnsPaginated() {
-        var pageable = PageRequest.of(0, 20);
-        var page = new PageImpl<>(List.<FeatureFlagAuditLogResponse>of());
-        when(featureFlagService.getAllAuditLogs(pageable)).thenReturn(page);
-
-        Page<FeatureFlagAuditLogResponse> result = controller.getAllAuditLogs(pageable);
-
-        assertThat(result.getContent()).isEmpty();
-        verify(featureFlagService).getAllAuditLogs(pageable);
     }
 
     @Test
