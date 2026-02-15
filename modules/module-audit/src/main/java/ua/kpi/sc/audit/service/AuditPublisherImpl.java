@@ -1,6 +1,7 @@
 package ua.kpi.sc.audit.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import ua.kpi.sc.common.audit.AuditPublisher;
  *
  * @since 0.4.0
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuditPublisherImpl implements AuditPublisher {
@@ -25,7 +27,12 @@ public class AuditPublisherImpl implements AuditPublisher {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void publish(AuditEvent event) {
-        repository.save(toEntity(event));
+        try {
+            repository.save(toEntity(event));
+        } catch (Exception e) {
+            log.error("Failed to persist audit event: action={}, entityType={}, entityId={}",
+                    event.action(), event.entityType(), event.entityId(), e);
+        }
     }
 
     private AuditEventEntity toEntity(AuditEvent event) {
