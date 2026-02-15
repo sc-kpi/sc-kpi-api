@@ -1,0 +1,182 @@
+java.lang.AssertionError: [Expected HTTP status 403 but got 200. Body: {
+    "content": [
+        {
+            "id": "afbfeca1-87d6-4933-ba30-081c0adf0d1a",
+            "actorId": "04c9b15e-38aa-4b91-8aec-60729704bf23",
+            "actorEmail": "cleveland.cartwright@yahoo.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "04c9b15e-38aa-4b91-8aec-60729704bf23",
+            "entityName": "cleveland.cartwright@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:58.897488Z"
+        },
+        {
+            "id": "18842671-f616-4692-b7fc-c7afedd588bd",
+            "actorId": "d012ad69-672e-4997-9028-692ffabb086b",
+            "actorEmail": "basic@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "d012ad69-672e-4997-9028-692ffabb086b",
+            "entityName": "basic@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.221327Z"
+        },
+        {
+            "id": "d2551123-6940-4096-9d1a-ca2a55d9ffbc",
+            "actorId": "871ccf01-9dcf-4b43-aacd-412e381e6bad",
+            "actorEmail": "echo.hamill@hotmail.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "871ccf01-9dcf-4b43-aacd-412e381e6bad",
+            "entityName": "echo.hamill@hotmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.241972Z"
+        },
+        {
+            "id": "e376a0e0-ec48-4362-9a9a-d6ad9fb8b5ad",
+            "actorId": "4c4df1b9-3034-4da4-9be8-670e945b54a7",
+            "actorEmail": "admin@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "4c4df1b9-3034-4da4-9be8-670e945b54a7",
+            "entityName": "admin@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.247890Z"
+        },
+        {
+            "id": "2b317115-b79d-4669-a225-1027d7ad10e0",
+            "actorId": "b1719e4e-8d9c-4eb1-a4fb-d21ce16e6c61",
+            "actorEmail": "rosina.blick@gmail.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "b1719e4e-8d9c-4eb1-a4fb-d21ce16e6c61",
+            "entityName": "rosina.blick@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.252072Z"
+        },
+        {
+            "id": "7fa603d8-8db3-478e-97e3-a5b4c54b3cd5",
+            "actorId": "4c4df1b9-3034-4da4-9be8-670e945b54a7",
+            "actorEmail": "admin@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "4c4df1b9-3034-4da4-9be8-670e945b54a7",
+            "entityName": "admin@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.294537Z"
+        },
+        {
+            "id": "b48d357a-f462-4db7-9f5f-ee63bdc6bb6b",
+            "actorId": "d012ad69-672e-4997-9028-692ffabb086b",
+            "actorEmail": "basic@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "d012ad69-672e-4997-9028-692ffabb086b",
+            "entityName": "basic@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.299873Z"
+        },
+        {
+            "id": "f470944a-00cb-4465-88b6-2de84d13d221",
+            "actorId": "e2d60afc-e901-453a-af03-a48775039552",
+            "actorEmail": "maranda.kuhic@yahoo.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "e2d60afc-e901-453a-af03-a48775039552",
+            "entityName": "maranda.kuhic@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.319641Z"
+        },
+        {
+            "id": "d55b67bc-0df7-4410-afe2-eae24b83573e",
+            "actorId": "a7b201c6-ddc5-4048-ae85-3e4486faa9dd",
+            "actorEmail": "ardath.mertz@yahoo.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "a7b201c6-ddc5-4048-ae85-3e4486faa9dd",
+            "entityName": "ardath.mertz@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:40:59.345300Z"
+        },
+        {
+            "id": "52f2949c-d579-4a70-b92b-fcc479afec09",
+            "actorId": "e2d60afc-e901-453a-af03-a48775039552",
+            "actorEmail": "maranda.kuhic@yahoo.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "e2d60afc-e901-453a-af03-a48775039552",
+            "entityName": "maranda.kuhic@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:41:29.361106Z"
+        },
+        {
+            "id": "3108c9b1-332c-4d51-8122-a3add3ac3f43",
+            "actorId": "b1719e4e-8d9c-4eb1-a4fb-d21ce16e6c61",
+            "actorEmail": "rosina.blick@gmail.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "b1719e4e-8d9c-4eb1-a4fb-d21ce16e6c61",
+            "entityName": "rosina.blick@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:41:29.495594Z"
+        },
+        {
+            "id": "23cc7aa1-da03-4ea9-9549-4c47bbab221c",
+            "actorId": "a7b201c6-ddc5-4048-ae85-3e4486faa9dd",
+            "actorEmail": "ardath.mertz@yahoo.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "a7b201c6-ddc5-4048-ae85-3e4486faa9dd",
+            "entityName": "ardath.mertz@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:41:29.556632Z"
+        }
+    ],
+    "empty": false,
+    "first": true,
+    "last": true,
+    "number": 0,
+    "numberOfElements": 12,
+    "pageable": {
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 20,
+        "paged": true,
+        "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+        },
+        "unpaged": false
+    },
+    "size": 20,
+    "sort": {
+        "empty": true,
+        "sorted": false,
+        "unsorted": true
+    },
+    "totalElements": 12,
+    "totalPages": 1
+}] 
+expected: 403
+ but was: 200
+	at ua.kpi.sc.test.api.util.AssertionHelper.assertStatusCode(AssertionHelper.java:18)
+	at ua.kpi.sc.test.api.base.BaseApiTest.assertStatus(BaseApiTest.java:113)
+	at ua.kpi.sc.test.api.tests.audit.AuditTest.nonAdminAccess_returns403(AuditTest.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:697)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:1005)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testng.internal.thread.graph.TestNGFutureTask.run(TestNGFutureTask.java:22)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
