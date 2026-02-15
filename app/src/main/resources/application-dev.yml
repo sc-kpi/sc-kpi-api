@@ -1,3 +1,6 @@
+cookie:
+  secure: false
+
 spring:
   datasource:
     url: jdbc:h2:mem:sc_kpi;MODE=PostgreSQL;DB_CLOSE_DELAY=-1

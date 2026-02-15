@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ua.kpi.sc.auth.config.CookieProperties;
 import ua.kpi.sc.auth.config.JwtProperties;
 import ua.kpi.sc.auth.config.OAuthProperties;
 import ua.kpi.sc.auth.service.AuthService;
@@ -42,6 +43,7 @@ public class OAuthController {
     private final OAuthService oAuthService;
     private final OAuthProperties oAuthProperties;
     private final JwtProperties jwtProperties;
+    private final CookieProperties cookieProperties;
 
     @GetMapping("/google")
     @Operation(summary = "Initiate Google OAuth 2.0 login")
@@ -51,7 +53,7 @@ public class OAuthController {
         // Store state in HTTP-only cookie for CSRF protection
         response.addHeader(HttpHeaders.SET_COOKIE,
                 CookieUtil.buildCookie(OAUTH_STATE_COOKIE, state, STATE_COOKIE_MAX_AGE,
-                        "/api/v1/auth/oauth2").toString());
+                        "/api/v1/auth/oauth2", cookieProperties.isSecure()).toString());
 
         String authorizationUrl = oAuthService.buildGoogleAuthorizationUrl(state);
         return ResponseEntity.status(HttpStatus.FOUND)
@@ -77,16 +79,18 @@ public class OAuthController {
             AuthService.AuthResult result = oAuthService.processGoogleLogin(code);
 
             // Set auth cookies
+            boolean secure = cookieProperties.isSecure();
             response.addHeader(HttpHeaders.SET_COOKIE,
                     CookieUtil.createAccessTokenCookie(
-                            result.accessToken(), jwtProperties.getAccessExpiration()).toString());
+                            result.accessToken(), jwtProperties.getAccessExpiration(), secure).toString());
             response.addHeader(HttpHeaders.SET_COOKIE,
                     CookieUtil.createRefreshTokenCookie(
-                            result.refreshToken(), jwtProperties.getRefreshExpiration()).toString());
+                            result.refreshToken(), jwtProperties.getRefreshExpiration(), secure).toString());
 
             // Delete state cookie
             response.addHeader(HttpHeaders.SET_COOKIE,
-                    CookieUtil.createDeleteCookie(OAUTH_STATE_COOKIE, "/api/v1/auth/oauth2").toString());
+                    CookieUtil.createDeleteCookie(OAUTH_STATE_COOKIE, "/api/v1/auth/oauth2", secure)
+                            .toString());
 
             return ResponseEntity.status(HttpStatus.FOUND)
                     .header(HttpHeaders.LOCATION, oAuthProperties.getFrontendUrl())
