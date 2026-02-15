@@ -21,7 +21,6 @@ import ua.kpi.sc.common.audit.AuditAction;
 import ua.kpi.sc.common.audit.AuditEntityType;
 import ua.kpi.sc.common.audit.AuditEventBuilder;
 import ua.kpi.sc.common.audit.AuditPublisher;
-import ua.kpi.sc.common.featureflag.FeatureFlag;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.RequireTier;
 import ua.kpi.sc.common.security.UserPrincipal;
@@ -35,7 +34,6 @@ import ua.kpi.sc.common.security.UserPrincipal;
 @RequestMapping("/api/v1/admin/audit-logs")
 @Tag(name = "Audit", description = "Audit log endpoints (admin only)")
 @RequireTier(CapabilityTier.ADMIN)
-@FeatureFlag("audit.system")
 @RequiredArgsConstructor
 public class AuditController {
 
