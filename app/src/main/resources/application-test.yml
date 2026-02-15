@@ -24,6 +24,19 @@ app:
       redirect-uri: http://localhost:8080/api/v1/auth/oauth2/callback/google
       frontend-url: http://localhost:3000
 
+feature-flags:
+  cache-ttl-seconds: 0
+  defaults:
+    auth.oauth2.google: true
+    auth.password-reset: true
+    auth.registration: true
+    notifications.telegram: false
+    engagements.clubs: true
+    engagements.projects: true
+    council.departments: true
+    documents.management: true
+    user.partner-levels: true
+
 logging:
   level:
     ua.kpi.sc: DEBUG

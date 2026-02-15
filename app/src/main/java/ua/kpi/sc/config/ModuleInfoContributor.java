@@ -32,7 +32,9 @@ public class ModuleInfoContributor implements InfoContributor {
             module("notification", "ua.kpi.sc.notification",
                     "Notification delivery (email, push, in-app)"),
             module("audit", "ua.kpi.sc.audit",
-                    "Audit logging and change tracking")
+                    "Audit logging and change tracking"),
+            module("feature-flag", "ua.kpi.sc.featureflag",
+                    "Feature flag management and evaluation")
     );
 
     private static Map<String, String> module(String name, String pkg, String description) {

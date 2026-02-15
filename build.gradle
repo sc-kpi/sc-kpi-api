@@ -78,6 +78,7 @@ subprojects {
                     '**/entity/**',
                     '**/repository/**',
                     '**/security/JwtAuthenticationFilter*',
+                    '**/actuator/**',
                     '**/*Application*',
                 ])
             }))

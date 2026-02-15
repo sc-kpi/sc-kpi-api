@@ -99,4 +99,12 @@ public class OpenApiConfig {
                 .pathsToMatch("/api/v1/admin/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi featureFlagsApi() {
+        return GroupedOpenApi.builder()
+                .group("8-feature-flags")
+                .pathsToMatch("/api/v1/feature-flags/**", "/api/v1/admin/feature-flags/**")
+                .build();
+    }
 }

@@ -21,6 +21,7 @@ import ua.kpi.sc.auth.config.OAuthProperties;
 import ua.kpi.sc.auth.service.AuthService;
 import ua.kpi.sc.auth.service.OAuthService;
 import ua.kpi.sc.auth.util.CookieUtil;
+import ua.kpi.sc.common.featureflag.FeatureFlag;
 
 /**
  * REST controller for OAuth 2.0 authentication flows.
@@ -32,6 +33,7 @@ import ua.kpi.sc.auth.util.CookieUtil;
 @RequestMapping("/api/v1/auth/oauth2")
 @Tag(name = "OAuth", description = "OAuth 2.0 authentication endpoints")
 @RequiredArgsConstructor
+@FeatureFlag("auth.oauth2.google")
 public class OAuthController {
 
     private static final String OAUTH_STATE_COOKIE = "oauth_state";

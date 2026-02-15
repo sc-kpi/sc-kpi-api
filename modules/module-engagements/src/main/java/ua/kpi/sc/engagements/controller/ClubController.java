@@ -3,6 +3,7 @@ package ua.kpi.sc.engagements.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.kpi.sc.common.featureflag.FeatureFlag;
 
 /**
  * REST controller for student club CRUD operations and membership management.
@@ -12,5 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/clubs")
 @Tag(name = "Clubs", description = "Club management endpoints")
+@FeatureFlag("engagements.clubs")
 public class ClubController {
 }

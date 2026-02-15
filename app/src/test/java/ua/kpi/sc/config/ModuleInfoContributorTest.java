@@ -21,12 +21,12 @@ class ModuleInfoContributorTest {
         Info info = builder.build();
         var modules = (Map<String, Object>) info.getDetails().get("modules");
         assertThat(modules).isNotNull();
-        assertThat(modules.get("count")).isEqualTo(8);
+        assertThat(modules.get("count")).isEqualTo(9);
 
         var list = (List<Map<String, String>>) modules.get("list");
-        assertThat(list).hasSize(8);
+        assertThat(list).hasSize(9);
         assertThat(list.getFirst().get("name")).isEqualTo("common");
-        assertThat(list.getLast().get("name")).isEqualTo("audit");
+        assertThat(list.getLast().get("name")).isEqualTo("feature-flag");
 
         list.forEach(entry -> {
             assertThat(entry).containsKeys("name", "package", "description");

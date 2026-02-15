@@ -1,3 +1,6 @@
+feature-flags:
+  cache-ttl-seconds: 30
+
 logging:
   level:
     ua.kpi.sc: WARN

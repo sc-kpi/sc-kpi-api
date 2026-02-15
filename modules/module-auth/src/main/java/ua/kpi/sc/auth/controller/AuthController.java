@@ -24,6 +24,7 @@ import ua.kpi.sc.auth.dto.ResetPasswordRequest;
 import ua.kpi.sc.auth.service.AuthService;
 import ua.kpi.sc.auth.service.PasswordResetService;
 import ua.kpi.sc.auth.util.CookieUtil;
+import ua.kpi.sc.common.featureflag.FeatureFlag;
 import ua.kpi.sc.common.security.SecurityConstants;
 import ua.kpi.sc.common.security.UserPrincipal;
 
@@ -44,6 +45,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
+    @FeatureFlag("auth.registration")
     public ResponseEntity<AuthUserResponse> register(@Valid @RequestBody RegisterRequest request) {
         AuthService.AuthResult result = authService.register(request);
         HttpHeaders headers = createTokenHeaders(result);
@@ -88,6 +90,7 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     @Operation(summary = "Request a password reset email")
+    @FeatureFlag("auth.password-reset")
     public ResponseEntity<Void> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         passwordResetService.requestPasswordReset(request.email());
         return ResponseEntity.noContent().build();
@@ -95,6 +98,7 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     @Operation(summary = "Reset password using a token from email")
+    @FeatureFlag("auth.password-reset")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         passwordResetService.resetPassword(request.token(), request.newPassword());
         return ResponseEntity.noContent().build();

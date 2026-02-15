@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ua.kpi.sc.common.featureflag.FeatureFlag;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.RequireTier;
 import ua.kpi.sc.common.security.UserPrincipal;
@@ -133,6 +134,7 @@ public class UserController {
     @PostMapping("/{id}/partners")
     @RequireTier(CapabilityTier.ADMIN)
     @ResponseStatus(HttpStatus.CREATED)
+    @FeatureFlag("user.partner-levels")
     public PartnerMemberResponse assignPartnerLevel(
             @PathVariable UUID id,
             @Valid @RequestBody AssignPartnerLevelRequest request,
@@ -143,6 +145,7 @@ public class UserController {
     @DeleteMapping("/{id}/partners/{partnerId}")
     @RequireTier(CapabilityTier.ADMIN)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @FeatureFlag("user.partner-levels")
     public void removePartnerLevel(
             @PathVariable UUID id,
             @PathVariable UUID partnerId) {
