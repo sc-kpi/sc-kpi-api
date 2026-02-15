@@ -1,0 +1,29 @@
+java.lang.AssertionError: [Expected HTTP status 200 but got 401. Body: {
+    "detail": "Invalid email or password",
+    "instance": "/api/v1/auth/login",
+    "status": 401,
+    "title": "Unauthorized",
+    "type": "https://api.sc.kpi.ua/errors/401"
+}] 
+expected: 200
+ but was: 401
+	at ua.kpi.sc.test.api.util.AssertionHelper.assertStatusCode(AssertionHelper.java:18)
+	at ua.kpi.sc.test.api.base.BaseApiTest.assertOk(BaseApiTest.java:117)
+	at ua.kpi.sc.test.api.tests.user.UserChangePasswordTest.registerAndLogin(UserChangePasswordTest.java:35)
+	at ua.kpi.sc.test.api.tests.user.UserChangePasswordTest.changePasswordReturns204(UserChangePasswordTest.java:44)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:697)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:1005)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testng.internal.thread.graph.TestNGFutureTask.run(TestNGFutureTask.java:22)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)

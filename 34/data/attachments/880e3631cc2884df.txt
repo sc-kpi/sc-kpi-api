@@ -1,0 +1,193 @@
+java.lang.AssertionError: [Expected HTTP status 403 but got 200. Body: {
+    "content": [
+        {
+            "id": "ea1fb5c5-3f95-4c81-ae82-152af92a820c",
+            "actorId": "6c5d0c1a-b509-4ed0-9744-185981a30656",
+            "actorEmail": "admin@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "6c5d0c1a-b509-4ed0-9744-185981a30656",
+            "entityName": "admin@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:46.873077Z"
+        },
+        {
+            "id": "7aef7493-05f3-4122-9a3f-4dc613e6a9d3",
+            "actorId": "997aa215-e538-4d98-ae3d-9d66424b5744",
+            "actorEmail": "ezequiel.fahey@hotmail.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "997aa215-e538-4d98-ae3d-9d66424b5744",
+            "entityName": "ezequiel.fahey@hotmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:46.909688Z"
+        },
+        {
+            "id": "2de8224a-37c5-451e-a852-7c75c6fb1fc2",
+            "actorId": "215c03e6-bb1d-4af1-b11c-dc0806cf897f",
+            "actorEmail": "carrie.frami@yahoo.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "215c03e6-bb1d-4af1-b11c-dc0806cf897f",
+            "entityName": "carrie.frami@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:46.990811Z"
+        },
+        {
+            "id": "6e65727b-9ebc-487a-b12e-c968e62f353c",
+            "actorId": "6f4f7a20-e9cf-4a46-943a-31d2cbe132c3",
+            "actorEmail": "basic@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "6f4f7a20-e9cf-4a46-943a-31d2cbe132c3",
+            "entityName": "basic@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:47.028606Z"
+        },
+        {
+            "id": "53279de8-208f-40c7-8f8b-b48f6eb69521",
+            "actorId": "ed45713a-1936-4a57-8846-cff3ae65f479",
+            "actorEmail": "hollis.leuschke@yahoo.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "ed45713a-1936-4a57-8846-cff3ae65f479",
+            "entityName": "hollis.leuschke@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:47.032013Z"
+        },
+        {
+            "id": "c1107a73-5ac9-4782-a9f6-3277b9d49708",
+            "actorId": "e206068e-c8b2-4671-ac1a-cb4123d4a009",
+            "actorEmail": "mason.boyer@gmail.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "e206068e-c8b2-4671-ac1a-cb4123d4a009",
+            "entityName": "mason.boyer@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:47.039016Z"
+        },
+        {
+            "id": "981df631-3892-4910-ae95-638bd96ffa29",
+            "actorId": "74ca9be3-dc50-4d60-9a70-f7d8a2f3bd94",
+            "actorEmail": "stefan.cruickshank@yahoo.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "74ca9be3-dc50-4d60-9a70-f7d8a2f3bd94",
+            "entityName": "stefan.cruickshank@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:47.060723Z"
+        },
+        {
+            "id": "2ba26d14-4a70-4fda-923e-beb5d5234990",
+            "actorId": "d70e0242-e9b5-4148-a1ec-b6d637337755",
+            "actorEmail": "mao.ratke@gmail.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "d70e0242-e9b5-4148-a1ec-b6d637337755",
+            "entityName": "mao.ratke@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:47.067002Z"
+        },
+        {
+            "id": "b323bda2-1dee-475c-ad9f-3743052a72fa",
+            "actorId": "6f4f7a20-e9cf-4a46-943a-31d2cbe132c3",
+            "actorEmail": "basic@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "6f4f7a20-e9cf-4a46-943a-31d2cbe132c3",
+            "entityName": "basic@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:47:47.111527Z"
+        },
+        {
+            "id": "1b80da5e-a63f-4fbd-8c64-aa97841e62fa",
+            "actorId": "d70e0242-e9b5-4148-a1ec-b6d637337755",
+            "actorEmail": "mao.ratke@gmail.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "d70e0242-e9b5-4148-a1ec-b6d637337755",
+            "entityName": "mao.ratke@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:48:17.115073Z"
+        },
+        {
+            "id": "f1ab1602-742e-4d05-94d4-21a65872e50d",
+            "actorId": "215c03e6-bb1d-4af1-b11c-dc0806cf897f",
+            "actorEmail": "carrie.frami@yahoo.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "215c03e6-bb1d-4af1-b11c-dc0806cf897f",
+            "entityName": "carrie.frami@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:48:17.116748Z"
+        },
+        {
+            "id": "3efe3fba-a660-4c02-b920-2d82759e8196",
+            "actorId": "e206068e-c8b2-4671-ac1a-cb4123d4a009",
+            "actorEmail": "mason.boyer@gmail.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "e206068e-c8b2-4671-ac1a-cb4123d4a009",
+            "entityName": "mason.boyer@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:48:17.411083Z"
+        },
+        {
+            "id": "1832da2c-0d4a-4903-a37f-ca16abfcafc4",
+            "actorId": "74ca9be3-dc50-4d60-9a70-f7d8a2f3bd94",
+            "actorEmail": "stefan.cruickshank@yahoo.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "74ca9be3-dc50-4d60-9a70-f7d8a2f3bd94",
+            "entityName": "stefan.cruickshank@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T13:48:17.509346Z"
+        }
+    ],
+    "empty": false,
+    "first": true,
+    "last": true,
+    "number": 0,
+    "numberOfElements": 13,
+    "pageable": {
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 20,
+        "paged": true,
+        "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+        },
+        "unpaged": false
+    },
+    "size": 20,
+    "sort": {
+        "empty": true,
+        "sorted": false,
+        "unsorted": true
+    },
+    "totalElements": 13,
+    "totalPages": 1
+}] 
+expected: 403
+ but was: 200
+	at ua.kpi.sc.test.api.util.AssertionHelper.assertStatusCode(AssertionHelper.java:18)
+	at ua.kpi.sc.test.api.base.BaseApiTest.assertStatus(BaseApiTest.java:113)
+	at ua.kpi.sc.test.api.tests.audit.AuditTest.nonAdminAccess_returns403(AuditTest.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:697)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:1005)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testng.internal.thread.graph.TestNGFutureTask.run(TestNGFutureTask.java:22)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
