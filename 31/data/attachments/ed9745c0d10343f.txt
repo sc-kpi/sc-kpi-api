@@ -1,0 +1,7 @@
+{
+  "recipient": "fernande.reinger@gmail.com",
+  "mailpitUrl": "http://localhost:8025",
+  "timeoutSeconds": "20",
+  "lastStatusCode": "200",
+  "suggestion": "Check that Mailpit is running at http://localhost:8025 and the application is sending emails"
+}
