@@ -17,6 +17,7 @@ COPY modules/module-council/build.gradle modules/module-council/build.gradle
 COPY modules/module-document/build.gradle modules/module-document/build.gradle
 COPY modules/module-notification/build.gradle modules/module-notification/build.gradle
 COPY modules/module-audit/build.gradle modules/module-audit/build.gradle
+COPY modules/module-feature-flag/build.gradle modules/module-feature-flag/build.gradle
 COPY app/build.gradle app/build.gradle
 
 # 3. Download deps (cached unless build files change)
