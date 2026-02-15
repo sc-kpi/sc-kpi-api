@@ -1,0 +1,1872 @@
+<div>Status code 200 </div>
+
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;openapi&quot;: &quot;3.1.0&quot;,
+    &quot;info&quot;: {
+        &quot;title&quot;: &quot;Student Council KPI API&quot;,
+        &quot;description&quot;: &quot;Student Council of KPI - Backend API&quot;,
+        &quot;contact&quot;: {
+            &quot;name&quot;: &quot;DCT Team&quot;,
+            &quot;url&quot;: &quot;https://sc.kpi.ua&quot;
+        },
+        &quot;version&quot;: &quot;1.0.0&quot;
+    },
+    &quot;servers&quot;: [
+        {
+            &quot;url&quot;: &quot;http://localhost:8080&quot;,
+            &quot;description&quot;: &quot;Generated server url&quot;
+        }
+    ],
+    &quot;security&quot;: [
+        {
+            &quot;bearerAuth&quot;: [
+                
+            ]
+        }
+    ],
+    &quot;tags&quot;: [
+        {
+            &quot;name&quot;: &quot;Users&quot;,
+            &quot;description&quot;: &quot;User management endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;OAuth&quot;,
+            &quot;description&quot;: &quot;OAuth 2.0 authentication endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Feature Flags Admin&quot;,
+            &quot;description&quot;: &quot;Feature flag management endpoints (admin only)&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Authentication&quot;,
+            &quot;description&quot;: &quot;Authentication endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Feature Flags&quot;,
+            &quot;description&quot;: &quot;Feature flag evaluation endpoints&quot;
+        }
+    ],
+    &quot;paths&quot;: {
+        &quot;/api/v1/users&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;listUsers&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;search&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;tier&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int32&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;active&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageUserListResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;createUser&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/CreateUserRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/partners&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;assignPartnerLevel&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/AssignPartnerLevelRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PartnerMemberResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/reset-password&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Reset password using a token from email&quot;,
+                &quot;operationId&quot;: &quot;resetPassword&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ResetPasswordRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/register&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Register a new user&quot;,
+                &quot;operationId&quot;: &quot;register&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/RegisterRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/refresh&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Refresh access token using refresh token cookie&quot;,
+                &quot;operationId&quot;: &quot;refresh&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/logout&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Log out and clear tokens&quot;,
+                &quot;operationId&quot;: &quot;logout&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/login&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Authenticate with email and password&quot;,
+                &quot;operationId&quot;: &quot;login&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/LoginRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/forgot-password&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Request a password reset email&quot;,
+                &quot;operationId&quot;: &quot;forgotPassword&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ForgotPasswordRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;listFlags&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageFeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;createFlag&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/CreateFeatureFlagRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}/overrides&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;addOverride&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/CreateOverrideRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/OverrideResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/bulk-toggle&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;bulkToggle&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/BulkToggleRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;array&quot;,
+                                    &quot;items&quot;: {
+                                        &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;getUser&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;deleteUser&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            },
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateUser&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateUserRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/tier&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateTier&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateTierRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/status&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateStatus&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateStatusRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/me&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;getMe&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateSelf&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateUserRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/me/password&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;changePassword&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ChangePasswordRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;deleteFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            },
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateFeatureFlagRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}/toggle&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;toggleFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ToggleFeatureFlagRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/feature-flags&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags&quot;
+                ],
+                &quot;operationId&quot;: &quot;evaluateAll&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;object&quot;,
+                                    &quot;additionalProperties&quot;: {
+                                        &quot;type&quot;: &quot;boolean&quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/feature-flags/{key}&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags&quot;
+                ],
+                &quot;operationId&quot;: &quot;evaluate&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;key&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagEvaluationResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/oauth2/google&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;OAuth&quot;
+                ],
+                &quot;summary&quot;: &quot;Initiate Google OAuth 2.0 login&quot;,
+                &quot;operationId&quot;: &quot;googleLogin&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/oauth2/callback/google&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;OAuth&quot;
+                ],
+                &quot;summary&quot;: &quot;Google OAuth 2.0 callback&quot;,
+                &quot;operationId&quot;: &quot;googleCallback&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;code&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;state&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/me&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Get current authenticated user info&quot;,
+                &quot;operationId&quot;: &quot;getMe_1&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}/audit-log&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getAuditLog&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageFeatureFlagAuditLogResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/audit-log&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getAllAuditLogs&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageFeatureFlagAuditLogResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/partners/{partnerId}&quot;: {
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;removePartnerLevel&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;partnerId&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}/overrides/{overrideId}&quot;: {
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;removeOverride&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;overrideId&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            }
+        }
+    },
+    &quot;components&quot;: {
+        &quot;schemas&quot;: {
+            &quot;CreateUserRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;tier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 5,
+                        &quot;minimum&quot;: 0
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;firstName&quot;,
+                    &quot;lastName&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;PartnerMemberResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;partnerId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;level&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;assignedAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;UserResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;active&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;createdAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    },
+                    &quot;partnerRoles&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/PartnerMemberResponse&quot;
+                        }
+                    }
+                }
+            },
+            &quot;AssignPartnerLevelRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;partnerId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;level&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;level&quot;,
+                    &quot;partnerId&quot;
+                ]
+            },
+            &quot;ResetPasswordRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;token&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;newPassword&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;newPassword&quot;,
+                    &quot;token&quot;
+                ]
+            },
+            &quot;RegisterRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[\\p{L}\\p{M}\\s&#39;.\\-]+$&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[\\p{L}\\p{M}\\s&#39;.\\-]+$&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;firstName&quot;,
+                    &quot;lastName&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;AuthUserResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;partnerRoles&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/PartnerRoleDto&quot;
+                        }
+                    }
+                }
+            },
+            &quot;PartnerRoleDto&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;partnerId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;level&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                }
+            },
+            &quot;LoginRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;ForgotPasswordRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;
+                ]
+            },
+            &quot;CreateFeatureFlagRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;key&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 255,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[a-z][a-z0-9.\\-]*$&quot;
+                    },
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 255,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;environment&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;rolloutPercentage&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 100,
+                        &quot;minimum&quot;: 0
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;key&quot;,
+                    &quot;name&quot;
+                ]
+            },
+            &quot;FeatureFlagResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;key&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;environment&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;rolloutPercentage&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;overrides&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/OverrideResponse&quot;
+                        }
+                    },
+                    &quot;createdBy&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;createdAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    },
+                    &quot;updatedAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;OverrideResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;overrideType&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;TIER&quot;,
+                            &quot;USER&quot;
+                        ]
+                    },
+                    &quot;tierLevel&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;userId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;CreateOverrideRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;overrideType&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;TIER&quot;,
+                            &quot;USER&quot;
+                        ]
+                    },
+                    &quot;tierLevel&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;userId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;enabled&quot;,
+                    &quot;overrideType&quot;
+                ]
+            },
+            &quot;BulkToggleRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;keys&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;minItems&quot;: 1
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;reason&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;enabled&quot;,
+                    &quot;keys&quot;
+                ]
+            },
+            &quot;UpdateUserRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;firstName&quot;,
+                    &quot;lastName&quot;
+                ]
+            },
+            &quot;UpdateTierRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;tier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 5,
+                        &quot;minimum&quot;: 0
+                    }
+                }
+            },
+            &quot;UpdateStatusRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;active&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;ChangePasswordRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;currentPassword&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;newPassword&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;currentPassword&quot;,
+                    &quot;newPassword&quot;
+                ]
+            },
+            &quot;UpdateFeatureFlagRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 255,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;environment&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;rolloutPercentage&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 100,
+                        &quot;minimum&quot;: 0
+                    }
+                }
+            },
+            &quot;ToggleFeatureFlagRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;reason&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;enabled&quot;
+                ]
+            },
+            &quot;Pageable&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;page&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 0
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;sort&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                }
+            },
+            &quot;PageUserListResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/UserListResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;PageableObject&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;offset&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;paged&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;pageNumber&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageSize&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;unpaged&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;SortObject&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;sorted&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;unsorted&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;UserListResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;active&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;FeatureFlagEvaluationResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;key&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;PageFeatureFlagResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;FeatureFlagAuditLogResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;flagId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;flagKey&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;action&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;fieldName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;oldValue&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;newValue&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;reason&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;changedBy&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;changedAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;PageFeatureFlagAuditLogResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagAuditLogResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            }
+        },
+        &quot;securitySchemes&quot;: {
+            &quot;bearerAuth&quot;: {
+                &quot;type&quot;: &quot;http&quot;,
+                &quot;scheme&quot;: &quot;bearer&quot;,
+                &quot;bearerFormat&quot;: &quot;JWT&quot;
+            }
+        }
+    }
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>X-Frame-Options: DENY</div>
+        <div>Keep-Alive: timeout=60</div>
+        <div>Cache-Control: no-cache, no-store, max-age=0, must-revalidate</div>
+        <div>X-Content-Type-Options: nosniff</div>
+        <div>Connection: keep-alive</div>
+        <div>Vary: Access-Control-Request-Headers</div>
+        <div>Pragma: no-cache</div>
+        <div>Expires: 0</div>
+        <div>X-XSS-Protection: 0</div>
+        <div>Content-Length: 20502</div>
+        <div>Date: Sun, 15 Feb 2026 09:23:55 GMT</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
