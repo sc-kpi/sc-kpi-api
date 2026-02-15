@@ -72,7 +72,8 @@ public class SecurityFilterChainConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/clubs", "/api/v1/clubs/**",
                                 "/api/v1/projects", "/api/v1/projects/**",
-                                "/api/v1/departments", "/api/v1/departments/**"
+                                "/api/v1/departments", "/api/v1/departments/**",
+                                "/api/v1/feature-flags", "/api/v1/feature-flags/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**", "/swagger-ui.html",

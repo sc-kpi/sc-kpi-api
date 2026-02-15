@@ -27,4 +27,7 @@ project(':module-notification').projectDir = file('modules/module-notification')
 include 'module-audit'
 project(':module-audit').projectDir = file('modules/module-audit')
 
+include 'module-feature-flag'
+project(':module-feature-flag').projectDir = file('modules/module-feature-flag')
+
 include 'app'

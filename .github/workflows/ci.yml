@@ -153,6 +153,9 @@ jobs:
           docker compose logs api --tail 50
           exit 1
 
+      - name: Report feature flag status
+        run: curl -sf http://localhost:8080/actuator/info | jq '.featureFlags' || true
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

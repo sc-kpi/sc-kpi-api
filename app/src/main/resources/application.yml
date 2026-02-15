@@ -90,5 +90,10 @@ management:
     info:
       enabled: true
 
+feature-flags:
+  cache-ttl-seconds: ${FEATURE_FLAGS_CACHE_TTL:30}
+  overrides: {}
+  defaults: {}
+
 server:
   port: ${SERVER_PORT:8080}
