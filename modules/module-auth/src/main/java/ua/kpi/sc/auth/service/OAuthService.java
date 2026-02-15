@@ -18,6 +18,10 @@ import ua.kpi.sc.auth.dto.GoogleTokenResponse;
 import ua.kpi.sc.auth.dto.GoogleUserInfo;
 import ua.kpi.sc.auth.entity.OAuthAccount;
 import ua.kpi.sc.auth.repository.OAuthAccountRepository;
+import ua.kpi.sc.common.audit.AuditAction;
+import ua.kpi.sc.common.audit.AuditEntityType;
+import ua.kpi.sc.common.audit.AuditEventBuilder;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.UnauthorizedException;
 import ua.kpi.sc.common.security.UserDetailsPort;
@@ -43,6 +47,7 @@ public class OAuthService {
     private final UserDetailsPort userDetailsPort;
     private final AuthService authService;
     private final RestClient oAuthRestClient;
+    private final AuditPublisher auditPublisher;
 
     /**
      * Builds the Google authorization URL for the consent screen redirect.
@@ -108,14 +113,33 @@ public class OAuthService {
         Optional<OAuthAccount> existingOAuth = oAuthAccountRepository
                 .findByProviderAndProviderUserId(PROVIDER, userInfo.sub());
         if (existingOAuth.isPresent()) {
-            return userDetailsPort.loadById(existingOAuth.get().getUserId())
+            UserPrincipal principal = userDetailsPort.loadById(existingOAuth.get().getUserId())
                     .orElseThrow(() -> new UnauthorizedException("User not found"));
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actor(principal)
+                    .action(AuditAction.OAUTH_LOGIN)
+                    .entityType(AuditEntityType.AUTH)
+                    .entityId(principal.getId())
+                    .entityName(principal.getEmail())
+                    .sourceModule("auth")
+                    .details("Google OAuth login")
+                    .build());
+            return principal;
         }
 
         // 2. Existing user by email → link + login
         Optional<UserPrincipal> existingUser = userDetailsPort.loadByEmail(userInfo.email());
         if (existingUser.isPresent()) {
             linkOAuthAccount(existingUser.get().getId(), userInfo);
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actor(existingUser.get())
+                    .action(AuditAction.OAUTH_LINKED)
+                    .entityType(AuditEntityType.AUTH)
+                    .entityId(existingUser.get().getId())
+                    .entityName(existingUser.get().getEmail())
+                    .sourceModule("auth")
+                    .details("Google account linked")
+                    .build());
             return existingUser.get();
         }
 
@@ -124,6 +148,15 @@ public class OAuthService {
         String lastName = userInfo.familyName() != null ? userInfo.familyName() : "";
         UserPrincipal newUser = userDetailsPort.createUser(userInfo.email(), null, firstName, lastName);
         linkOAuthAccount(newUser.getId(), userInfo);
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(newUser)
+                .action(AuditAction.REGISTER)
+                .entityType(AuditEntityType.AUTH)
+                .entityId(newUser.getId())
+                .entityName(newUser.getEmail())
+                .sourceModule("auth")
+                .details("via Google OAuth")
+                .build());
         return newUser;
     }
 

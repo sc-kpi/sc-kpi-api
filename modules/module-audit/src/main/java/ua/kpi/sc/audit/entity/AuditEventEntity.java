@@ -1,4 +1,4 @@
-package ua.kpi.sc.featureflag.entity;
+package ua.kpi.sc.audit.entity;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -16,26 +16,35 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "feature_flag_audit_log")
+@Table(name = "audit_events")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeatureFlagAuditLog {
+public class AuditEventEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "flag_id")
-    private UUID flagId;
+    @Column(name = "actor_id")
+    private UUID actorId;
 
-    @Column(name = "flag_key", nullable = false)
-    private String flagKey;
+    @Column(name = "actor_email")
+    private String actorEmail;
 
     @Column(nullable = false)
     private String action;
+
+    @Column(name = "entity_type", nullable = false)
+    private String entityType;
+
+    @Column(name = "entity_id")
+    private UUID entityId;
+
+    @Column(name = "entity_name")
+    private String entityName;
 
     @Column(name = "field_name")
     private String fieldName;
@@ -46,12 +55,15 @@ public class FeatureFlagAuditLog {
     @Column(name = "new_value")
     private String newValue;
 
-    private String reason;
+    private String details;
 
-    @Column(name = "changed_by")
-    private UUID changedBy;
+    @Column(name = "source_module", nullable = false)
+    private String sourceModule;
 
-    @Column(name = "changed_at", nullable = false, updatable = false)
+    @Column(name = "ip_address")
+    private String ipAddress;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     @Builder.Default
-    private Instant changedAt = Instant.now();
+    private Instant createdAt = Instant.now();
 }

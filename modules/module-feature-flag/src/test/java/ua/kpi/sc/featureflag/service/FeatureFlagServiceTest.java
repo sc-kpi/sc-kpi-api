@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import ua.kpi.sc.common.audit.AuditEvent;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
@@ -26,7 +28,6 @@ import ua.kpi.sc.featureflag.dto.UpdateFeatureFlagRequest;
 import ua.kpi.sc.featureflag.entity.FeatureFlag;
 import ua.kpi.sc.featureflag.entity.FeatureFlagOverride;
 import ua.kpi.sc.featureflag.entity.OverrideType;
-import ua.kpi.sc.featureflag.repository.FeatureFlagAuditLogRepository;
 import ua.kpi.sc.featureflag.repository.FeatureFlagOverrideRepository;
 import ua.kpi.sc.featureflag.repository.FeatureFlagRepository;
 
@@ -44,7 +45,7 @@ class FeatureFlagServiceTest {
     @Mock
     private FeatureFlagOverrideRepository overrideRepository;
     @Mock
-    private FeatureFlagAuditLogRepository auditLogRepository;
+    private AuditPublisher auditPublisher;
     @Mock
     private FeatureFlagEvaluationService evaluationService;
 
@@ -72,7 +73,7 @@ class FeatureFlagServiceTest {
         FeatureFlagResponse response = service.createFlag(request, adminPrincipal);
 
         assertThat(response.key()).isEqualTo("test.flag");
-        verify(auditLogRepository).save(any());
+        verify(auditPublisher).publish(any(AuditEvent.class));
         verify(evaluationService).evictCache();
     }
 
@@ -96,7 +97,7 @@ class FeatureFlagServiceTest {
         var request = new ToggleFeatureFlagRequest(false, "Emergency disable");
         FeatureFlagResponse response = service.toggleFlag(flagId, request, adminPrincipal);
 
-        verify(auditLogRepository).save(any());
+        verify(auditPublisher).publish(any(AuditEvent.class));
         verify(evaluationService).evictCache();
     }
 
@@ -119,7 +120,7 @@ class FeatureFlagServiceTest {
         service.deleteFlag(flagId, adminPrincipal);
 
         verify(flagRepository).delete(flag);
-        verify(auditLogRepository).save(any());
+        verify(auditPublisher).publish(any(AuditEvent.class));
         verify(evaluationService).evictCache();
     }
 
@@ -388,29 +389,5 @@ class FeatureFlagServiceTest {
 
         assertThatThrownBy(() -> service.bulkToggle(request, adminPrincipal))
                 .isInstanceOf(ResourceNotFoundException.class);
-    }
-
-    @Test
-    void getAuditLog_returnsPaginatedResults() {
-        UUID flagId = UUID.randomUUID();
-        var pageable = PageRequest.of(0, 20);
-        when(auditLogRepository.findByFlagIdOrderByChangedAtDesc(flagId, pageable))
-                .thenReturn(new PageImpl<>(List.of()));
-
-        Page<ua.kpi.sc.featureflag.dto.FeatureFlagAuditLogResponse> result =
-                service.getAuditLog(flagId, pageable);
-
-        assertThat(result.getContent()).isEmpty();
-    }
-
-    @Test
-    void getAllAuditLogs_returnsPaginatedResults() {
-        var pageable = PageRequest.of(0, 20);
-        when(auditLogRepository.findAllByOrderByChangedAtDesc(pageable))
-                .thenReturn(new PageImpl<>(List.of()));
-
-        var result = service.getAllAuditLogs(pageable);
-
-        assertThat(result.getContent()).isEmpty();
     }
 }

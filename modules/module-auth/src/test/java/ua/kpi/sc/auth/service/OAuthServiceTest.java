@@ -17,6 +17,7 @@ import ua.kpi.sc.auth.dto.GoogleTokenResponse;
 import ua.kpi.sc.auth.dto.GoogleUserInfo;
 import ua.kpi.sc.auth.entity.OAuthAccount;
 import ua.kpi.sc.auth.repository.OAuthAccountRepository;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.UnauthorizedException;
 import ua.kpi.sc.common.security.CapabilityTier;
@@ -43,6 +44,8 @@ class OAuthServiceTest {
     private AuthService authService;
     @Mock
     private RestClient oAuthRestClient;
+    @Mock
+    private AuditPublisher auditPublisher;
 
     @InjectMocks
     @Spy

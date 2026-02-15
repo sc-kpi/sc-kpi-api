@@ -9,6 +9,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.kpi.sc.common.audit.AuditAction;
+import ua.kpi.sc.common.audit.AuditEntityType;
+import ua.kpi.sc.common.audit.AuditEventBuilder;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ForbiddenException;
@@ -42,6 +46,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PartnerMemberRepository partnerMemberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuditPublisher auditPublisher;
 
     @Transactional(readOnly = true)
     public Page<UserListResponse> listUsers(Pageable pageable, String search, Integer tier, Boolean active) {
@@ -86,6 +91,16 @@ public class UserService {
                 .active(true)
                 .build();
         User saved = userRepository.save(user);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(requester)
+                .action(AuditAction.CREATED)
+                .entityType(AuditEntityType.USER)
+                .entityId(saved.getId())
+                .entityName(saved.getEmail())
+                .sourceModule("user")
+                .build());
+
         return toFullResponse(saved);
     }
 
@@ -94,9 +109,39 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", id));
 
+        String oldFirstName = user.getFirstName();
+        String oldLastName = user.getLastName();
         user.setFirstName(InputSanitizer.stripHtml(request.firstName()));
         user.setLastName(InputSanitizer.stripHtml(request.lastName()));
         User saved = userRepository.save(user);
+
+        if (!oldFirstName.equals(saved.getFirstName())) {
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actor(requester)
+                    .action(AuditAction.UPDATED)
+                    .entityType(AuditEntityType.USER)
+                    .entityId(saved.getId())
+                    .entityName(saved.getEmail())
+                    .fieldName("firstName")
+                    .oldValue(oldFirstName)
+                    .newValue(saved.getFirstName())
+                    .sourceModule("user")
+                    .build());
+        }
+        if (!oldLastName.equals(saved.getLastName())) {
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actor(requester)
+                    .action(AuditAction.UPDATED)
+                    .entityType(AuditEntityType.USER)
+                    .entityId(saved.getId())
+                    .entityName(saved.getEmail())
+                    .fieldName("lastName")
+                    .oldValue(oldLastName)
+                    .newValue(saved.getLastName())
+                    .sourceModule("user")
+                    .build());
+        }
+
         return toFullResponse(saved);
     }
 
@@ -109,8 +154,22 @@ public class UserService {
             throw new ForbiddenException("Only admins can assign admin tier");
         }
 
+        String oldTier = String.valueOf(user.getCapabilityTier().getLevel());
         user.setCapabilityTier(CapabilityTier.fromLevel(tier));
         User saved = userRepository.save(user);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(requester)
+                .action(AuditAction.UPDATED)
+                .entityType(AuditEntityType.USER)
+                .entityId(saved.getId())
+                .entityName(saved.getEmail())
+                .fieldName("tier")
+                .oldValue(oldTier)
+                .newValue(String.valueOf(tier))
+                .sourceModule("user")
+                .build());
+
         return toFullResponse(saved);
     }
 
@@ -123,8 +182,22 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", id));
 
+        String oldActive = String.valueOf(user.isActive());
         user.setActive(active);
         User saved = userRepository.save(user);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(requester)
+                .action(AuditAction.UPDATED)
+                .entityType(AuditEntityType.USER)
+                .entityId(saved.getId())
+                .entityName(saved.getEmail())
+                .fieldName("active")
+                .oldValue(oldActive)
+                .newValue(String.valueOf(active))
+                .sourceModule("user")
+                .build());
+
         return toFullResponse(saved);
     }
 
@@ -139,6 +212,15 @@ public class UserService {
 
         user.setActive(false);
         userRepository.save(user);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(requester)
+                .action(AuditAction.DELETED)
+                .entityType(AuditEntityType.USER)
+                .entityId(user.getId())
+                .entityName(user.getEmail())
+                .sourceModule("user")
+                .build());
     }
 
     @Transactional
@@ -163,6 +245,17 @@ public class UserService {
                     .build();
         }
         PartnerMember saved = partnerMemberRepository.save(member);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(requester)
+                .action(AuditAction.UPDATED)
+                .entityType(AuditEntityType.USER)
+                .entityId(userId)
+                .fieldName("partnerLevel")
+                .newValue(level.getValue() + " @ " + request.partnerId())
+                .sourceModule("user")
+                .build());
+
         return new PartnerMemberResponse(saved.getPartnerId(), saved.getLevel().getValue(), saved.getAssignedAt());
     }
 
@@ -178,6 +271,16 @@ public class UserService {
 
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actorId(userId)
+                .actorEmail(user.getEmail())
+                .action(AuditAction.PASSWORD_CHANGED)
+                .entityType(AuditEntityType.USER)
+                .entityId(userId)
+                .entityName(user.getEmail())
+                .sourceModule("user")
+                .build());
     }
 
     @Transactional
@@ -186,6 +289,16 @@ public class UserService {
             throw new ResourceNotFoundException("User", userId);
         }
         partnerMemberRepository.deleteByUserIdAndPartnerId(userId, partnerId);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .action(AuditAction.UPDATED)
+                .entityType(AuditEntityType.USER)
+                .entityId(userId)
+                .fieldName("partnerLevel")
+                .oldValue(partnerId.toString())
+                .sourceModule("user")
+                .details("Partner level removed")
+                .build());
     }
 
     private PartnerLevel parsePartnerLevel(String value) {

@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ForbiddenException;
@@ -46,6 +47,8 @@ class UserServiceTest {
     private PartnerMemberRepository partnerMemberRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private AuditPublisher auditPublisher;
 
     @InjectMocks
     private UserService userService;

@@ -30,6 +30,7 @@ public class TestDataInitializer implements CommandLineRunner {
     }
 
     private void seedFeatureFlags() {
+        seedFlag("audit.system", "Audit System", "Centralized audit logging system", true);
         seedFlag("auth.oauth2.google", "Google OAuth", "Google OAuth 2.0 authentication", true);
         seedFlag("auth.password-reset", "Password Reset", "Password reset via email", true);
         seedFlag("auth.registration", "Registration", "New user registration", true);

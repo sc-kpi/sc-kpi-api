@@ -8,6 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.kpi.sc.common.audit.AuditAction;
+import ua.kpi.sc.common.audit.AuditEntityType;
+import ua.kpi.sc.common.audit.AuditEventBuilder;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
@@ -15,16 +19,13 @@ import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.featureflag.dto.BulkToggleRequest;
 import ua.kpi.sc.featureflag.dto.CreateFeatureFlagRequest;
 import ua.kpi.sc.featureflag.dto.CreateOverrideRequest;
-import ua.kpi.sc.featureflag.dto.FeatureFlagAuditLogResponse;
 import ua.kpi.sc.featureflag.dto.FeatureFlagResponse;
 import ua.kpi.sc.featureflag.dto.OverrideResponse;
 import ua.kpi.sc.featureflag.dto.ToggleFeatureFlagRequest;
 import ua.kpi.sc.featureflag.dto.UpdateFeatureFlagRequest;
 import ua.kpi.sc.featureflag.entity.FeatureFlag;
-import ua.kpi.sc.featureflag.entity.FeatureFlagAuditLog;
 import ua.kpi.sc.featureflag.entity.FeatureFlagOverride;
 import ua.kpi.sc.featureflag.entity.OverrideType;
-import ua.kpi.sc.featureflag.repository.FeatureFlagAuditLogRepository;
 import ua.kpi.sc.featureflag.repository.FeatureFlagOverrideRepository;
 import ua.kpi.sc.featureflag.repository.FeatureFlagRepository;
 
@@ -34,7 +35,7 @@ public class FeatureFlagService {
 
     private final FeatureFlagRepository flagRepository;
     private final FeatureFlagOverrideRepository overrideRepository;
-    private final FeatureFlagAuditLogRepository auditLogRepository;
+    private final AuditPublisher auditPublisher;
     private final FeatureFlagEvaluationService evaluationService;
 
     @Transactional(readOnly = true)
@@ -70,8 +71,8 @@ public class FeatureFlagService {
                 .build();
 
         FeatureFlag saved = flagRepository.save(flag);
-        logAudit(saved.getId(), saved.getKey(), "CREATED", null, null,
-                String.valueOf(saved.isEnabled()), null, requester.getId());
+        publishAudit(saved.getId(), saved.getKey(), AuditAction.CREATED, null, null,
+                String.valueOf(saved.isEnabled()), null, requester);
         evaluationService.evictCache();
         return toResponse(saved);
     }
@@ -81,25 +82,25 @@ public class FeatureFlagService {
         FeatureFlag flag = findFlagById(id);
 
         if (request.name() != null) {
-            logFieldChange(flag, "name", flag.getName(), request.name(), requester.getId());
+            publishFieldChange(flag, "name", flag.getName(), request.name(), requester);
             flag.setName(request.name());
         }
         if (request.description() != null) {
-            logFieldChange(flag, "description", flag.getDescription(), request.description(), requester.getId());
+            publishFieldChange(flag, "description", flag.getDescription(), request.description(), requester);
             flag.setDescription(request.description());
         }
         if (request.enabled() != null) {
-            logFieldChange(flag, "enabled", String.valueOf(flag.isEnabled()),
-                    String.valueOf(request.enabled()), requester.getId());
+            publishFieldChange(flag, "enabled", String.valueOf(flag.isEnabled()),
+                    String.valueOf(request.enabled()), requester);
             flag.setEnabled(request.enabled());
         }
         if (request.environment() != null) {
-            logFieldChange(flag, "environment", flag.getEnvironment(), request.environment(), requester.getId());
+            publishFieldChange(flag, "environment", flag.getEnvironment(), request.environment(), requester);
             flag.setEnvironment(request.environment());
         }
         if (request.rolloutPercentage() != null) {
-            logFieldChange(flag, "rolloutPercentage", String.valueOf(flag.getRolloutPercentage()),
-                    String.valueOf(request.rolloutPercentage()), requester.getId());
+            publishFieldChange(flag, "rolloutPercentage", String.valueOf(flag.getRolloutPercentage()),
+                    String.valueOf(request.rolloutPercentage()), requester);
             flag.setRolloutPercentage(request.rolloutPercentage());
         }
 
@@ -117,8 +118,8 @@ public class FeatureFlagService {
         flag.setEnabled(request.enabled());
         FeatureFlag saved = flagRepository.save(flag);
 
-        logAudit(saved.getId(), saved.getKey(), "TOGGLED", "enabled", oldValue, newValue,
-                request.reason(), requester.getId());
+        publishAudit(saved.getId(), saved.getKey(), AuditAction.TOGGLED, "enabled", oldValue, newValue,
+                request.reason(), requester);
         evaluationService.evictCache();
         return toResponse(saved);
     }
@@ -126,7 +127,7 @@ public class FeatureFlagService {
     @Transactional
     public void deleteFlag(UUID id, UserPrincipal requester) {
         FeatureFlag flag = findFlagById(id);
-        logAudit(flag.getId(), flag.getKey(), "DELETED", null, null, null, null, requester.getId());
+        publishAudit(flag.getId(), flag.getKey(), AuditAction.DELETED, null, null, null, null, requester);
         flagRepository.delete(flag);
         evaluationService.evictCache();
     }
@@ -145,8 +146,8 @@ public class FeatureFlagService {
                 .build();
 
         FeatureFlagOverride saved = overrideRepository.save(override);
-        logAudit(flag.getId(), flag.getKey(), "OVERRIDE_ADDED", request.overrideType().name(),
-                null, String.valueOf(request.enabled()), null, requester.getId());
+        publishAudit(flag.getId(), flag.getKey(), AuditAction.OVERRIDE_ADDED, request.overrideType().name(),
+                null, String.valueOf(request.enabled()), null, requester);
         evaluationService.evictCache();
         return toOverrideResponse(saved);
     }
@@ -161,8 +162,8 @@ public class FeatureFlagService {
             throw new BadRequestException("Override does not belong to the specified flag");
         }
 
-        logAudit(flag.getId(), flag.getKey(), "OVERRIDE_REMOVED", override.getOverrideType().name(),
-                String.valueOf(override.isEnabled()), null, null, requester.getId());
+        publishAudit(flag.getId(), flag.getKey(), AuditAction.OVERRIDE_REMOVED, override.getOverrideType().name(),
+                String.valueOf(override.isEnabled()), null, null, requester);
         overrideRepository.delete(override);
         evaluationService.evictCache();
     }
@@ -176,23 +177,11 @@ public class FeatureFlagService {
                     String oldValue = String.valueOf(flag.isEnabled());
                     flag.setEnabled(request.enabled());
                     var saved = flagRepository.save(flag);
-                    logAudit(saved.getId(), saved.getKey(), "BULK_TOGGLED", "enabled",
-                            oldValue, String.valueOf(request.enabled()), request.reason(), requester.getId());
+                    publishAudit(saved.getId(), saved.getKey(), AuditAction.BULK_TOGGLED, "enabled",
+                            oldValue, String.valueOf(request.enabled()), request.reason(), requester);
                     return toResponse(saved);
                 })
                 .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public Page<FeatureFlagAuditLogResponse> getAuditLog(UUID flagId, Pageable pageable) {
-        return auditLogRepository.findByFlagIdOrderByChangedAtDesc(flagId, pageable)
-                .map(this::toAuditResponse);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<FeatureFlagAuditLogResponse> getAllAuditLogs(Pageable pageable) {
-        return auditLogRepository.findAllByOrderByChangedAtDesc(pageable)
-                .map(this::toAuditResponse);
     }
 
     private FeatureFlag findFlagById(UUID id) {
@@ -209,22 +198,24 @@ public class FeatureFlagService {
         }
     }
 
-    private void logFieldChange(FeatureFlag flag, String fieldName, String oldValue,
-                                String newValue, UUID changedBy) {
-        logAudit(flag.getId(), flag.getKey(), "UPDATED", fieldName, oldValue, newValue, null, changedBy);
+    private void publishFieldChange(FeatureFlag flag, String fieldName, String oldValue,
+                                    String newValue, UserPrincipal requester) {
+        publishAudit(flag.getId(), flag.getKey(), AuditAction.UPDATED, fieldName, oldValue, newValue, null, requester);
     }
 
-    private void logAudit(UUID flagId, String flagKey, String action, String fieldName,
-                          String oldValue, String newValue, String reason, UUID changedBy) {
-        auditLogRepository.save(FeatureFlagAuditLog.builder()
-                .flagId(flagId)
-                .flagKey(flagKey)
+    private void publishAudit(UUID flagId, String flagKey, AuditAction action, String fieldName,
+                              String oldValue, String newValue, String reason, UserPrincipal requester) {
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(requester)
                 .action(action)
+                .entityType(AuditEntityType.FEATURE_FLAG)
+                .entityId(flagId)
+                .entityName(flagKey)
                 .fieldName(fieldName)
                 .oldValue(oldValue)
                 .newValue(newValue)
-                .reason(reason)
-                .changedBy(changedBy)
+                .details(reason)
+                .sourceModule("feature-flag")
                 .build());
     }
 
@@ -255,21 +246,6 @@ public class FeatureFlagService {
                 override.getTierLevel(),
                 override.getUserId(),
                 override.isEnabled()
-        );
-    }
-
-    private FeatureFlagAuditLogResponse toAuditResponse(FeatureFlagAuditLog log) {
-        return new FeatureFlagAuditLogResponse(
-                log.getId(),
-                log.getFlagId(),
-                log.getFlagKey(),
-                log.getAction(),
-                log.getFieldName(),
-                log.getOldValue(),
-                log.getNewValue(),
-                log.getReason(),
-                log.getChangedBy(),
-                log.getChangedAt()
         );
     }
 }

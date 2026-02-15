@@ -21,6 +21,10 @@ import ua.kpi.sc.auth.dto.RegisterRequest;
 import ua.kpi.sc.auth.entity.RefreshToken;
 import ua.kpi.sc.auth.repository.RefreshTokenRepository;
 import ua.kpi.sc.auth.security.JwtTokenProvider;
+import ua.kpi.sc.common.audit.AuditAction;
+import ua.kpi.sc.common.audit.AuditEntityType;
+import ua.kpi.sc.common.audit.AuditEventBuilder;
+import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.util.InputSanitizer;
 import ua.kpi.sc.common.util.PasswordValidator;
@@ -44,6 +48,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
+    private final AuditPublisher auditPublisher;
 
     @Transactional
     public AuthResult register(RegisterRequest request) {
@@ -58,25 +63,82 @@ public class AuthService {
         UserPrincipal principal = userDetailsPort.createUser(
                 request.email(), passwordHash, firstName, lastName);
 
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(principal)
+                .action(AuditAction.REGISTER)
+                .entityType(AuditEntityType.AUTH)
+                .entityId(principal.getId())
+                .entityName(principal.getEmail())
+                .sourceModule("auth")
+                .build());
+
         return createAuthResult(principal);
     }
 
     @Transactional
     public AuthResult login(LoginRequest request) {
         UserPrincipal principal = userDetailsPort.loadByEmail(request.email())
-                .orElseThrow(() -> new UnauthorizedException("Invalid email or password"));
+                .orElseThrow(() -> {
+                    auditPublisher.publish(AuditEventBuilder.builder()
+                            .action(AuditAction.LOGIN_FAILED)
+                            .entityType(AuditEntityType.AUTH)
+                            .entityName(request.email())
+                            .sourceModule("auth")
+                            .details("Invalid email")
+                            .build());
+                    return new UnauthorizedException("Invalid email or password");
+                });
 
         if (principal.getPassword() == null) {
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actorId(principal.getId())
+                    .actorEmail(principal.getEmail())
+                    .action(AuditAction.LOGIN_FAILED)
+                    .entityType(AuditEntityType.AUTH)
+                    .entityId(principal.getId())
+                    .entityName(principal.getEmail())
+                    .sourceModule("auth")
+                    .details("OAuth-only account attempted password login")
+                    .build());
             throw new UnauthorizedException("This account uses social login. Please sign in with Google.");
         }
 
         if (!passwordEncoder.matches(request.password(), principal.getPassword())) {
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actorId(principal.getId())
+                    .actorEmail(principal.getEmail())
+                    .action(AuditAction.LOGIN_FAILED)
+                    .entityType(AuditEntityType.AUTH)
+                    .entityId(principal.getId())
+                    .entityName(principal.getEmail())
+                    .sourceModule("auth")
+                    .details("Invalid password")
+                    .build());
             throw new UnauthorizedException("Invalid email or password");
         }
 
         if (!principal.isEnabled()) {
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actorId(principal.getId())
+                    .actorEmail(principal.getEmail())
+                    .action(AuditAction.LOGIN_FAILED)
+                    .entityType(AuditEntityType.AUTH)
+                    .entityId(principal.getId())
+                    .entityName(principal.getEmail())
+                    .sourceModule("auth")
+                    .details("Account disabled")
+                    .build());
             throw new UnauthorizedException("Account is disabled");
         }
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(principal)
+                .action(AuditAction.LOGIN)
+                .entityType(AuditEntityType.AUTH)
+                .entityId(principal.getId())
+                .entityName(principal.getEmail())
+                .sourceModule("auth")
+                .build());
 
         return createAuthResult(principal);
     }
@@ -84,6 +146,14 @@ public class AuthService {
     @Transactional
     public void logout(UUID userId) {
         refreshTokenRepository.deleteByUserId(userId);
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actorId(userId)
+                .action(AuditAction.LOGOUT)
+                .entityType(AuditEntityType.AUTH)
+                .entityId(userId)
+                .sourceModule("auth")
+                .build());
     }
 
     @Transactional
