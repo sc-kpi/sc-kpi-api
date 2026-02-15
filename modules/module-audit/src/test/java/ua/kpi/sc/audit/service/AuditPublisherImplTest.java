@@ -1,7 +1,10 @@
 package ua.kpi.sc.audit.service;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -11,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ua.kpi.sc.audit.entity.AuditEventEntity;
 import ua.kpi.sc.audit.repository.AuditEventRepository;
 import ua.kpi.sc.common.audit.AuditEvent;
 
@@ -67,5 +71,19 @@ class AuditPublisherImplTest {
                 entity.getEntityType().equals("AUTH") &&
                 entity.getCreatedAt() != null  // auto-populated by record
         ));
+    }
+
+    @Test
+    void publish_doesNotPropagateException() {
+        when(repository.save(any(AuditEventEntity.class)))
+                .thenThrow(new RuntimeException("DB failure"));
+
+        var event = new AuditEvent(
+                null, null, "CREATED", "USER",
+                null, "test@kpi.ua", null, null, null,
+                null, "user", null, null
+        );
+
+        assertThatCode(() -> publisher.publish(event)).doesNotThrowAnyException();
     }
 }
