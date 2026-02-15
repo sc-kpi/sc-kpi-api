@@ -3,8 +3,9 @@ package ua.kpi.sc.audit.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 import ua.kpi.sc.audit.entity.AuditEventEntity;
 import ua.kpi.sc.audit.repository.AuditEventRepository;
 import ua.kpi.sc.common.audit.AuditEvent;
@@ -12,8 +13,9 @@ import ua.kpi.sc.common.audit.AuditPublisher;
 
 /**
  * Persists audit events in an independent transaction.
- * {@code REQUIRES_NEW} ensures events are saved even when the caller's transaction rolls back
- * (e.g. LOGIN_FAILED).
+ * Uses programmatic {@code TransactionTemplate} with {@code REQUIRES_NEW} propagation
+ * inside a try-catch so that failures (including connection pool exhaustion) never
+ * propagate to the calling service.
  *
  * @since 0.4.0
  */
@@ -23,12 +25,14 @@ import ua.kpi.sc.common.audit.AuditPublisher;
 public class AuditPublisherImpl implements AuditPublisher {
 
     private final AuditEventRepository repository;
+    private final PlatformTransactionManager transactionManager;
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void publish(AuditEvent event) {
         try {
-            repository.save(toEntity(event));
+            var tx = new TransactionTemplate(transactionManager);
+            tx.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+            tx.executeWithoutResult(status -> repository.save(toEntity(event)));
         } catch (Exception e) {
             log.error("Failed to persist audit event: action={}, entityType={}, entityId={}",
                     event.action(), event.entityType(), event.entityId(), e);

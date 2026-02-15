@@ -3,17 +3,22 @@ package ua.kpi.sc.audit.service;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.Instant;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import ua.kpi.sc.audit.entity.AuditEventEntity;
 import ua.kpi.sc.audit.repository.AuditEventRepository;
 import ua.kpi.sc.common.audit.AuditEvent;
@@ -24,8 +29,17 @@ class AuditPublisherImplTest {
     @Mock
     private AuditEventRepository repository;
 
-    @InjectMocks
+    @Mock
+    private PlatformTransactionManager transactionManager;
+
     private AuditPublisherImpl publisher;
+
+    @BeforeEach
+    void setUp() {
+        publisher = new AuditPublisherImpl(repository, transactionManager);
+        lenient().when(transactionManager.getTransaction(any(TransactionDefinition.class)))
+                .thenReturn(mock(TransactionStatus.class));
+    }
 
     @Test
     void publish_savesEntityWithAllFields() {
@@ -74,7 +88,7 @@ class AuditPublisherImplTest {
     }
 
     @Test
-    void publish_doesNotPropagateException() {
+    void publish_doesNotPropagateException_fromRepository() {
         when(repository.save(any(AuditEventEntity.class)))
                 .thenThrow(new RuntimeException("DB failure"));
 
@@ -82,6 +96,20 @@ class AuditPublisherImplTest {
                 null, null, "CREATED", "USER",
                 null, "test@kpi.ua", null, null, null,
                 null, "user", null, null
+        );
+
+        assertThatCode(() -> publisher.publish(event)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void publish_doesNotPropagateException_fromTransactionManager() {
+        when(transactionManager.getTransaction(any(TransactionDefinition.class)))
+                .thenThrow(new RuntimeException("Connection pool exhausted"));
+
+        var event = new AuditEvent(
+                null, null, "LOGIN", "AUTH",
+                null, "user@kpi.ua", null, null, null,
+                null, "auth", null, null
         );
 
         assertThatCode(() -> publisher.publish(event)).doesNotThrowAnyException();
