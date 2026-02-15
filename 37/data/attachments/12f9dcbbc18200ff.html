@@ -1,0 +1,28 @@
+<div>PATCH to http://localhost:8080/api/v1/users/me</div>
+
+    <h4>Body</h4>
+    <div>
+    <pre class="preformated-text">
+{
+    &quot;firstName&quot;: &quot;Giselle&quot;,
+    &quot;lastName&quot;: &quot;Dicki&quot;
+}    </pre>
+    </div>
+
+    <h4>Headers</h4>
+    <div>
+            <div>Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4MGI4ODFjZC02MjQ3LTQxNTQtYWIwNy1mN2FiODNhYzdmMDgiLCJzdWIiOiI2YmJkNmFjMS1lYTY5LTQzNmMtOTY4NS0yZGVjNGEzZjZjZDMiLCJlbWFpbCI6ImJhc2ljQHRlc3Qua3BpLnVhIiwidGllciI6MSwiY29udGV4dHMiOnsicGFydG5lcnMiOnt9fSwiaWF0IjoxNzcxMTY2NTY4LCJleHAiOjE3NzExNzAxNjh9.ss9i3AlgYb_Ds9f84B8GH1JJVj2pXSay59yTESH6Cb4</div>
+            <div>Accept: application/json</div>
+            <div>Content-Type: application/json</div>
+    </div>
+
+
+
+    <h4>Curl</h4>
+    <div>
+        curl -v -X PATCH &#39;http://localhost:8080/api/v1/users/me&#39; -H &#39;Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI4MGI4ODFjZC02MjQ3LTQxNTQtYWIwNy1mN2FiODNhYzdmMDgiLCJzdWIiOiI2YmJkNmFjMS1lYTY5LTQzNmMtOTY4NS0yZGVjNGEzZjZjZDMiLCJlbWFpbCI6ImJhc2ljQHRlc3Qua3BpLnVhIiwidGllciI6MSwiY29udGV4dHMiOnsicGFydG5lcnMiOnt9fSwiaWF0IjoxNzcxMTY2NTY4LCJleHAiOjE3NzExNzAxNjh9.ss9i3AlgYb_Ds9f84B8GH1JJVj2pXSay59yTESH6Cb4&#39; -H &#39;Accept: application/json&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;firstName&quot;: &quot;Giselle&quot;,
+    &quot;lastName&quot;: &quot;Dicki&quot;
+}&#39;
+    </div>
+
