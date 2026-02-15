@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.kpi.sc.auth.config.CookieProperties;
 import ua.kpi.sc.auth.config.JwtProperties;
 import ua.kpi.sc.auth.dto.AuthUserResponse;
 import ua.kpi.sc.auth.dto.ForgotPasswordRequest;
@@ -42,6 +43,7 @@ public class AuthController {
     private final AuthService authService;
     private final PasswordResetService passwordResetService;
     private final JwtProperties jwtProperties;
+    private final CookieProperties cookieProperties;
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
@@ -66,9 +68,11 @@ public class AuthController {
         authService.logout(principal.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,
-                CookieUtil.createDeleteCookie(SecurityConstants.ACCESS_TOKEN_COOKIE).toString());
+                CookieUtil.createDeleteCookie(SecurityConstants.ACCESS_TOKEN_COOKIE,
+                        cookieProperties.isSecure()).toString());
         headers.add(HttpHeaders.SET_COOKIE,
-                CookieUtil.createDeleteCookie(SecurityConstants.REFRESH_TOKEN_COOKIE).toString());
+                CookieUtil.createDeleteCookie(SecurityConstants.REFRESH_TOKEN_COOKIE,
+                        cookieProperties.isSecure()).toString());
         return ResponseEntity.ok().headers(headers).build();
     }
 
@@ -105,13 +109,14 @@ public class AuthController {
     }
 
     private HttpHeaders createTokenHeaders(AuthService.AuthResult result) {
+        boolean secure = cookieProperties.isSecure();
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,
                 CookieUtil.createAccessTokenCookie(
-                        result.accessToken(), jwtProperties.getAccessExpiration()).toString());
+                        result.accessToken(), jwtProperties.getAccessExpiration(), secure).toString());
         headers.add(HttpHeaders.SET_COOKIE,
                 CookieUtil.createRefreshTokenCookie(
-                        result.refreshToken(), jwtProperties.getRefreshExpiration()).toString());
+                        result.refreshToken(), jwtProperties.getRefreshExpiration(), secure).toString());
         return headers;
     }
 

@@ -10,7 +10,7 @@ class CookieUtilTest {
 
     @Test
     void accessTokenCookieHasCorrectAttributes() {
-        ResponseCookie cookie = CookieUtil.createAccessTokenCookie("token123", 3600000);
+        ResponseCookie cookie = CookieUtil.createAccessTokenCookie("token123", 3600000, true);
 
         assertThat(cookie.getName()).isEqualTo(SecurityConstants.ACCESS_TOKEN_COOKIE);
         assertThat(cookie.getValue()).isEqualTo("token123");
@@ -23,7 +23,7 @@ class CookieUtilTest {
 
     @Test
     void refreshTokenCookieHasCorrectAttributes() {
-        ResponseCookie cookie = CookieUtil.createRefreshTokenCookie("refresh123", 2592000000L);
+        ResponseCookie cookie = CookieUtil.createRefreshTokenCookie("refresh123", 2592000000L, true);
 
         assertThat(cookie.getName()).isEqualTo(SecurityConstants.REFRESH_TOKEN_COOKIE);
         assertThat(cookie.getValue()).isEqualTo("refresh123");
@@ -34,12 +34,20 @@ class CookieUtilTest {
 
     @Test
     void deleteCookieHasZeroMaxAge() {
-        ResponseCookie cookie = CookieUtil.createDeleteCookie("access_token");
+        ResponseCookie cookie = CookieUtil.createDeleteCookie("access_token", true);
 
         assertThat(cookie.getName()).isEqualTo("access_token");
         assertThat(cookie.getValue()).isEmpty();
         assertThat(cookie.getMaxAge().getSeconds()).isZero();
         assertThat(cookie.isHttpOnly()).isTrue();
         assertThat(cookie.isSecure()).isTrue();
+    }
+
+    @Test
+    void cookieWithSecureFalse() {
+        ResponseCookie cookie = CookieUtil.createAccessTokenCookie("token123", 3600000, false);
+
+        assertThat(cookie.isSecure()).isFalse();
+        assertThat(cookie.isHttpOnly()).isTrue();
     }
 }
