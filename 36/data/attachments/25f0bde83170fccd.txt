@@ -1,0 +1,160 @@
+java.lang.AssertionError: [Expected HTTP status 403 but got 200. Body: {
+    "content": [
+        {
+            "id": "0fa8a44b-40cc-4018-838c-0f47b09c5940",
+            "actorId": "10aaf6e2-fb7f-454b-9ef3-d025be3f2834",
+            "actorEmail": "gerard.hirthe@yahoo.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "10aaf6e2-fb7f-454b-9ef3-d025be3f2834",
+            "entityName": "gerard.hirthe@yahoo.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:04:48.938755Z"
+        },
+        {
+            "id": "3917bf62-92fb-4ba6-b3d7-b96f13ef556b",
+            "actorId": "3151fab1-41c0-4198-93c5-fc7482e4706c",
+            "actorEmail": "basic@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "3151fab1-41c0-4198-93c5-fc7482e4706c",
+            "entityName": "basic@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:04:48.956716Z"
+        },
+        {
+            "id": "11ea013d-0130-4dda-9d2b-e9fd8bec0eb1",
+            "actorId": "3151fab1-41c0-4198-93c5-fc7482e4706c",
+            "actorEmail": "basic@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "3151fab1-41c0-4198-93c5-fc7482e4706c",
+            "entityName": "basic@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:04:48.955442Z"
+        },
+        {
+            "id": "2792dabf-2f6d-4a14-9c74-99f29bbd7a0f",
+            "actorId": "3735b56b-b377-4ff0-8caa-54556517a3c4",
+            "actorEmail": "admin@test.kpi.ua",
+            "action": "LOGIN",
+            "entityType": "AUTH",
+            "entityId": "3735b56b-b377-4ff0-8caa-54556517a3c4",
+            "entityName": "admin@test.kpi.ua",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:04:48.999911Z"
+        },
+        {
+            "id": "9a1f1c00-6409-4f8f-824f-57b44d881e72",
+            "actorId": "c2ab04c7-e2eb-48df-a7b6-bdbddad74663",
+            "actorEmail": "danyell.lehner@gmail.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "c2ab04c7-e2eb-48df-a7b6-bdbddad74663",
+            "entityName": "danyell.lehner@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:04:49.005709Z"
+        },
+        {
+            "id": "a08b92c1-8ca4-4b1b-8085-b98bb69ee157",
+            "actorId": "3a8d16f8-aaf7-4f18-b06e-8e5045091eda",
+            "actorEmail": "abbey.nikolaus@hotmail.com",
+            "action": "REGISTER",
+            "entityType": "AUTH",
+            "entityId": "3a8d16f8-aaf7-4f18-b06e-8e5045091eda",
+            "entityName": "abbey.nikolaus@hotmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:04:49.027331Z"
+        },
+        {
+            "id": "78c8a05f-843f-4adf-9da5-b59c8b626356",
+            "actorId": "eeae0f2d-2706-4af6-94fc-9222f0dff977",
+            "actorEmail": "erwin.schumm@gmail.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "eeae0f2d-2706-4af6-94fc-9222f0dff977",
+            "entityName": "erwin.schumm@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:05:19.300620Z"
+        },
+        {
+            "id": "4bf9f1b9-0b7c-40a4-8772-70aa78f15566",
+            "actorId": "59de5b60-87e3-431a-9167-be5510b77fd6",
+            "actorEmail": "queenie.yost@gmail.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "59de5b60-87e3-431a-9167-be5510b77fd6",
+            "entityName": "queenie.yost@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:05:19.315793Z"
+        },
+        {
+            "id": "e1bb92a2-3344-4774-a230-36b78e790c48",
+            "actorId": "3a8d16f8-aaf7-4f18-b06e-8e5045091eda",
+            "actorEmail": "abbey.nikolaus@hotmail.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "3a8d16f8-aaf7-4f18-b06e-8e5045091eda",
+            "entityName": "abbey.nikolaus@hotmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:05:19.424460Z"
+        },
+        {
+            "id": "c4568479-5f8b-419a-b484-f0cc173f9bff",
+            "actorId": "c2ab04c7-e2eb-48df-a7b6-bdbddad74663",
+            "actorEmail": "danyell.lehner@gmail.com",
+            "action": "PASSWORD_RESET_REQUESTED",
+            "entityType": "AUTH",
+            "entityId": "c2ab04c7-e2eb-48df-a7b6-bdbddad74663",
+            "entityName": "danyell.lehner@gmail.com",
+            "sourceModule": "auth",
+            "createdAt": "2026-02-15T14:05:19.427306Z"
+        }
+    ],
+    "empty": false,
+    "first": true,
+    "last": true,
+    "number": 0,
+    "numberOfElements": 10,
+    "pageable": {
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 20,
+        "paged": true,
+        "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+        },
+        "unpaged": false
+    },
+    "size": 20,
+    "sort": {
+        "empty": true,
+        "sorted": false,
+        "unsorted": true
+    },
+    "totalElements": 10,
+    "totalPages": 1
+}] 
+expected: 403
+ but was: 200
+	at ua.kpi.sc.test.api.util.AssertionHelper.assertStatusCode(AssertionHelper.java:18)
+	at ua.kpi.sc.test.api.base.BaseApiTest.assertStatus(BaseApiTest.java:113)
+	at ua.kpi.sc.test.api.tests.audit.AuditTest.nonAdminAccess_returns403(AuditTest.java:47)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:697)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:1005)
+	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:545)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testng.internal.thread.graph.TestNGFutureTask.run(TestNGFutureTask.java:22)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
