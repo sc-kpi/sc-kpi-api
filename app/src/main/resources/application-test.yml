@@ -23,6 +23,14 @@ app:
       client-secret: test-client-secret
       redirect-uri: http://localhost:8080/api/v1/auth/oauth2/callback/google
       frontend-url: http://localhost:3000
+  notifications:
+    sse-timeout-ms: 30000
+    sse-heartbeat-interval-ms: 10000
+    retention-days: 90
+    email-max-retries: 1
+    cleanup:
+      enabled: false
+      cron: "0 0 3 * * ?"
 
 feature-flags:
   cache-ttl-seconds: 0
@@ -31,6 +39,10 @@ feature-flags:
     auth.password-reset: true
     auth.registration: true
     notifications.telegram: false
+    notifications.enabled: true
+    notifications.email: false
+    notifications.sse: true
+    notifications.admin-broadcast: true
     engagements.clubs: true
     engagements.projects: true
     council.departments: true

@@ -24,6 +24,9 @@ import ua.kpi.sc.common.audit.AuditEventBuilder;
 import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.UnauthorizedException;
+import ua.kpi.sc.common.notification.NotificationCategory;
+import ua.kpi.sc.common.notification.NotificationEventBuilder;
+import ua.kpi.sc.common.notification.NotificationPublisher;
 import ua.kpi.sc.common.security.UserDetailsPort;
 import ua.kpi.sc.common.security.UserPrincipal;
 
@@ -48,6 +51,7 @@ public class OAuthService {
     private final AuthService authService;
     private final RestClient oAuthRestClient;
     private final AuditPublisher auditPublisher;
+    private final NotificationPublisher notificationPublisher;
 
     /**
      * Builds the Google authorization URL for the consent screen redirect.
@@ -139,6 +143,15 @@ public class OAuthService {
                     .entityName(existingUser.get().getEmail())
                     .sourceModule("auth")
                     .details("Google account linked")
+                    .build());
+            notificationPublisher.publishToUser(existingUser.get().getId(), NotificationEventBuilder.builder()
+                    .titleKey("notification.security.oauth_linked")
+                    .bodyKey("notification.security.oauth_linked.body")
+                    .bodyArgs("Google")
+                    .category(NotificationCategory.SECURITY)
+                    .sourceModule("auth")
+                    .relatedEntityId(existingUser.get().getId())
+                    .relatedEntityType("AUTH")
                     .build());
             return existingUser.get();
         }

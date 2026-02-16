@@ -16,6 +16,7 @@ import ua.kpi.sc.auth.entity.PasswordResetToken;
 import ua.kpi.sc.auth.repository.PasswordResetTokenRepository;
 import ua.kpi.sc.auth.repository.RefreshTokenRepository;
 import ua.kpi.sc.common.audit.AuditPublisher;
+import ua.kpi.sc.common.notification.NotificationPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.UserDetailsPort;
@@ -46,6 +47,8 @@ class PasswordResetServiceTest {
     private EmailService emailService;
     @Mock
     private AuditPublisher auditPublisher;
+    @Mock
+    private NotificationPublisher notificationPublisher;
 
     @InjectMocks
     private PasswordResetService passwordResetService;

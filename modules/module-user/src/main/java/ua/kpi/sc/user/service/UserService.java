@@ -17,6 +17,9 @@ import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ForbiddenException;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
+import ua.kpi.sc.common.notification.NotificationCategory;
+import ua.kpi.sc.common.notification.NotificationEventBuilder;
+import ua.kpi.sc.common.notification.NotificationPublisher;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.PartnerLevel;
 import ua.kpi.sc.common.security.UserPrincipal;
@@ -47,6 +50,7 @@ public class UserService {
     private final PartnerMemberRepository partnerMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditPublisher auditPublisher;
+    private final NotificationPublisher notificationPublisher;
 
     @Transactional(readOnly = true)
     public Page<UserListResponse> listUsers(Pageable pageable, String search, Integer tier, Boolean active) {
@@ -170,6 +174,16 @@ public class UserService {
                 .sourceModule("user")
                 .build());
 
+        notificationPublisher.publishToUser(saved.getId(), NotificationEventBuilder.builder()
+                .titleKey("notification.admin.tier_changed")
+                .bodyKey("notification.admin.tier_changed.body")
+                .bodyArgs(oldTier, String.valueOf(tier))
+                .category(NotificationCategory.ADMIN)
+                .sourceModule("user")
+                .relatedEntityId(saved.getId())
+                .relatedEntityType("USER")
+                .build());
+
         return toFullResponse(saved);
     }
 
@@ -196,6 +210,16 @@ public class UserService {
                 .oldValue(oldActive)
                 .newValue(String.valueOf(active))
                 .sourceModule("user")
+                .build());
+
+        notificationPublisher.publishToUser(saved.getId(), NotificationEventBuilder.builder()
+                .titleKey("notification.admin.status_changed")
+                .bodyKey("notification.admin.status_changed.body")
+                .bodyArgs(String.valueOf(active))
+                .category(NotificationCategory.ADMIN)
+                .sourceModule("user")
+                .relatedEntityId(saved.getId())
+                .relatedEntityType("USER")
                 .build());
 
         return toFullResponse(saved);
@@ -256,6 +280,16 @@ public class UserService {
                 .sourceModule("user")
                 .build());
 
+        notificationPublisher.publishToUser(userId, NotificationEventBuilder.builder()
+                .titleKey("notification.admin.partner_assigned")
+                .bodyKey("notification.admin.partner_assigned.body")
+                .bodyArgs(level.getValue(), request.partnerId().toString())
+                .category(NotificationCategory.ADMIN)
+                .sourceModule("user")
+                .relatedEntityId(userId)
+                .relatedEntityType("USER")
+                .build());
+
         return new PartnerMemberResponse(saved.getPartnerId(), saved.getLevel().getValue(), saved.getAssignedAt());
     }
 
@@ -298,6 +332,16 @@ public class UserService {
                 .oldValue(partnerId.toString())
                 .sourceModule("user")
                 .details("Partner level removed")
+                .build());
+
+        notificationPublisher.publishToUser(userId, NotificationEventBuilder.builder()
+                .titleKey("notification.admin.partner_removed")
+                .bodyKey("notification.admin.partner_removed.body")
+                .bodyArgs(partnerId.toString())
+                .category(NotificationCategory.ADMIN)
+                .sourceModule("user")
+                .relatedEntityId(userId)
+                .relatedEntityType("USER")
                 .build());
     }
 
