@@ -1,0 +1,27 @@
+<div>POST to http://localhost:8080/api/v1/auth/reset-password</div>
+
+    <h4>Body</h4>
+    <div>
+    <pre class="preformated-text">
+{
+    &quot;token&quot;: &quot;5401b8df-931c-4ba9-8ccf-1b593c675c96&quot;,
+    &quot;newPassword&quot;: &quot;NewTest@787634&quot;
+}    </pre>
+    </div>
+
+    <h4>Headers</h4>
+    <div>
+            <div>Accept: application/json</div>
+            <div>Content-Type: application/json</div>
+    </div>
+
+
+
+    <h4>Curl</h4>
+    <div>
+        curl -v -X POST &#39;http://localhost:8080/api/v1/auth/reset-password&#39; -H &#39;Accept: application/json&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;token&quot;: &quot;5401b8df-931c-4ba9-8ccf-1b593c675c96&quot;,
+    &quot;newPassword&quot;: &quot;NewTest@787634&quot;
+}&#39;
+    </div>
+
