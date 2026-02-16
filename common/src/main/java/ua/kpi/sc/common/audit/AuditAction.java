@@ -30,5 +30,12 @@ public enum AuditAction {
     OAUTH_LINKED,
 
     // Audit system actions
-    AUDIT_EXPORTED
+    AUDIT_EXPORTED,
+
+    // Notification actions
+    NOTIFICATION_SENT,
+    NOTIFICATION_READ,
+    NOTIFICATION_BROADCAST,
+    NOTIFICATION_PREFERENCES_UPDATED,
+    NOTIFICATION_CLEANUP
 }

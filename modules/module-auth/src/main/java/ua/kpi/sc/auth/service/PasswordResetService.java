@@ -17,6 +17,9 @@ import ua.kpi.sc.common.audit.AuditEntityType;
 import ua.kpi.sc.common.audit.AuditEventBuilder;
 import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
+import ua.kpi.sc.common.notification.NotificationCategory;
+import ua.kpi.sc.common.notification.NotificationEventBuilder;
+import ua.kpi.sc.common.notification.NotificationPublisher;
 import ua.kpi.sc.common.util.PasswordValidator;
 import ua.kpi.sc.common.security.UserDetailsPort;
 import ua.kpi.sc.common.security.UserPrincipal;
@@ -38,6 +41,7 @@ public class PasswordResetService {
     private final PasswordResetProperties properties;
     private final EmailService emailService;
     private final AuditPublisher auditPublisher;
+    private final NotificationPublisher notificationPublisher;
 
     /**
      * Initiates a password reset for the given email.
@@ -121,6 +125,15 @@ public class PasswordResetService {
                 .entityType(AuditEntityType.AUTH)
                 .entityId(resetToken.getUserId())
                 .sourceModule("auth")
+                .build());
+
+        notificationPublisher.publishToUser(resetToken.getUserId(), NotificationEventBuilder.builder()
+                .titleKey("notification.security.password_reset")
+                .bodyKey("notification.security.password_reset.body")
+                .category(NotificationCategory.SECURITY)
+                .sourceModule("auth")
+                .relatedEntityId(resetToken.getUserId())
+                .relatedEntityType("AUTH")
                 .build());
 
         log.info("Password reset completed for user {}", resetToken.getUserId());

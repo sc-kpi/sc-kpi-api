@@ -8,5 +8,7 @@ package ua.kpi.sc.common.audit;
 public enum AuditEntityType {
     USER,
     FEATURE_FLAG,
-    AUTH
+    AUTH,
+    NOTIFICATION,
+    NOTIFICATION_PREFERENCES
 }

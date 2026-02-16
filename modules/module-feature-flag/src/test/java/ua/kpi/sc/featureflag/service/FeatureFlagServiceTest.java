@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import ua.kpi.sc.common.audit.AuditEvent;
 import ua.kpi.sc.common.audit.AuditPublisher;
+import ua.kpi.sc.common.notification.NotificationPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
@@ -46,6 +47,8 @@ class FeatureFlagServiceTest {
     private FeatureFlagOverrideRepository overrideRepository;
     @Mock
     private AuditPublisher auditPublisher;
+    @Mock
+    private NotificationPublisher notificationPublisher;
     @Mock
     private FeatureFlagEvaluationService evaluationService;
 

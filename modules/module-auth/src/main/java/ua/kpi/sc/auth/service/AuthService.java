@@ -26,6 +26,9 @@ import ua.kpi.sc.common.audit.AuditEntityType;
 import ua.kpi.sc.common.audit.AuditEventBuilder;
 import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.ConflictException;
+import ua.kpi.sc.common.notification.NotificationCategory;
+import ua.kpi.sc.common.notification.NotificationEventBuilder;
+import ua.kpi.sc.common.notification.NotificationPublisher;
 import ua.kpi.sc.common.util.InputSanitizer;
 import ua.kpi.sc.common.util.PasswordValidator;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
@@ -49,6 +52,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
     private final AuditPublisher auditPublisher;
+    private final NotificationPublisher notificationPublisher;
 
     @Transactional
     public AuthResult register(RegisterRequest request) {
@@ -114,6 +118,14 @@ public class AuthService {
                     .sourceModule("auth")
                     .details("Invalid password")
                     .build());
+            notificationPublisher.publishToUser(principal.getId(), NotificationEventBuilder.builder()
+                    .titleKey("notification.security.login_failed")
+                    .bodyKey("notification.security.login_failed.body")
+                    .category(NotificationCategory.SECURITY)
+                    .sourceModule("auth")
+                    .relatedEntityId(principal.getId())
+                    .relatedEntityType("AUTH")
+                    .build());
             throw new UnauthorizedException("Invalid email or password");
         }
 
@@ -138,6 +150,15 @@ public class AuthService {
                 .entityId(principal.getId())
                 .entityName(principal.getEmail())
                 .sourceModule("auth")
+                .build());
+
+        notificationPublisher.publishToUser(principal.getId(), NotificationEventBuilder.builder()
+                .titleKey("notification.security.login")
+                .bodyKey("notification.security.login.body")
+                .category(NotificationCategory.SECURITY)
+                .sourceModule("auth")
+                .relatedEntityId(principal.getId())
+                .relatedEntityType("AUTH")
                 .build());
 
         return createAuthResult(principal);

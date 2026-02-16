@@ -15,6 +15,10 @@ import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.exception.BadRequestException;
 import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
+import ua.kpi.sc.common.notification.NotificationCategory;
+import ua.kpi.sc.common.notification.NotificationEventBuilder;
+import ua.kpi.sc.common.notification.NotificationPublisher;
+import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.featureflag.dto.BulkToggleRequest;
 import ua.kpi.sc.featureflag.dto.CreateFeatureFlagRequest;
@@ -36,6 +40,7 @@ public class FeatureFlagService {
     private final FeatureFlagRepository flagRepository;
     private final FeatureFlagOverrideRepository overrideRepository;
     private final AuditPublisher auditPublisher;
+    private final NotificationPublisher notificationPublisher;
     private final FeatureFlagEvaluationService evaluationService;
 
     @Transactional(readOnly = true)
@@ -121,6 +126,17 @@ public class FeatureFlagService {
         publishAudit(saved.getId(), saved.getKey(), AuditAction.TOGGLED, "enabled", oldValue, newValue,
                 request.reason(), requester);
         evaluationService.evictCache();
+
+        notificationPublisher.publishToAll(NotificationEventBuilder.builder()
+                .titleKey("notification.feature_flag.toggled")
+                .bodyKey("notification.feature_flag.toggled.body")
+                .bodyArgs(saved.getKey(), newValue)
+                .category(NotificationCategory.FEATURE_FLAG)
+                .sourceModule("feature-flag")
+                .relatedEntityId(saved.getId())
+                .relatedEntityType("FEATURE_FLAG")
+                .build());
+
         return toResponse(saved);
     }
 
@@ -149,6 +165,22 @@ public class FeatureFlagService {
         publishAudit(flag.getId(), flag.getKey(), AuditAction.OVERRIDE_ADDED, request.overrideType().name(),
                 null, String.valueOf(request.enabled()), null, requester);
         evaluationService.evictCache();
+
+        var notifEvent = NotificationEventBuilder.builder()
+                .titleKey("notification.feature_flag.override_added")
+                .bodyKey("notification.feature_flag.override_added.body")
+                .bodyArgs(flag.getKey(), request.overrideType().name())
+                .category(NotificationCategory.FEATURE_FLAG)
+                .sourceModule("feature-flag")
+                .relatedEntityId(flag.getId())
+                .relatedEntityType("FEATURE_FLAG")
+                .build();
+        if (request.overrideType() == OverrideType.TIER && request.tierLevel() != null) {
+            notificationPublisher.publishToTier(CapabilityTier.fromLevel(request.tierLevel()), notifEvent);
+        } else if (request.overrideType() == OverrideType.USER && request.userId() != null) {
+            notificationPublisher.publishToUser(request.userId(), notifEvent);
+        }
+
         return toOverrideResponse(saved);
     }
 
