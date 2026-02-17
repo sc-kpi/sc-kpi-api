@@ -33,6 +33,7 @@ import ua.kpi.sc.common.util.InputSanitizer;
 import ua.kpi.sc.common.util.PasswordValidator;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
 import ua.kpi.sc.common.exception.UnauthorizedException;
+import ua.kpi.sc.common.security.TwoFactorQueryPort;
 import ua.kpi.sc.common.security.UserDetailsPort;
 import ua.kpi.sc.common.security.UserPrincipal;
 
@@ -53,6 +54,7 @@ public class AuthService {
     private final JwtProperties jwtProperties;
     private final AuditPublisher auditPublisher;
     private final NotificationPublisher notificationPublisher;
+    private final TwoFactorQueryPort twoFactorQueryPort;
 
     @Transactional
     public AuthResult register(RegisterRequest request) {
@@ -80,7 +82,7 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthResult login(LoginRequest request) {
+    public LoginResult login(LoginRequest request) {
         UserPrincipal principal = userDetailsPort.loadByEmail(request.email())
                 .orElseThrow(() -> {
                     auditPublisher.publish(AuditEventBuilder.builder()
@@ -143,6 +145,20 @@ public class AuthService {
             throw new UnauthorizedException("Account is disabled");
         }
 
+        boolean twoFactorEnabled = twoFactorQueryPort.isTwoFactorEnabled(principal.getId());
+
+        if (twoFactorEnabled) {
+            auditPublisher.publish(AuditEventBuilder.builder()
+                    .actor(principal)
+                    .action(AuditAction.MFA_CHALLENGE_ISSUED)
+                    .entityType(AuditEntityType.AUTH)
+                    .entityId(principal.getId())
+                    .entityName(principal.getEmail())
+                    .sourceModule("auth")
+                    .build());
+            return new LoginResult(null, principal.getId(), true, true);
+        }
+
         auditPublisher.publish(AuditEventBuilder.builder()
                 .actor(principal)
                 .action(AuditAction.LOGIN)
@@ -161,7 +177,7 @@ public class AuthService {
                 .relatedEntityType("AUTH")
                 .build());
 
-        return createAuthResult(principal);
+        return new LoginResult(createAuthResult(principal), principal.getId(), false, false);
     }
 
     @Transactional
@@ -222,6 +238,36 @@ public class AuthService {
         return new AuthResult(accessToken, refreshTokenValue, toResponse(principal));
     }
 
+    /**
+     * Creates an AuthResult by loading user by ID. Used after MFA verification.
+     */
+    @Transactional
+    public AuthResult createAuthResultById(UUID userId) {
+        UserPrincipal principal = userDetailsPort.loadById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        auditPublisher.publish(AuditEventBuilder.builder()
+                .actor(principal)
+                .action(AuditAction.LOGIN)
+                .entityType(AuditEntityType.AUTH)
+                .entityId(principal.getId())
+                .entityName(principal.getEmail())
+                .sourceModule("auth")
+                .details("Login completed after MFA verification")
+                .build());
+
+        notificationPublisher.publishToUser(principal.getId(), NotificationEventBuilder.builder()
+                .titleKey("notification.security.login")
+                .bodyKey("notification.security.login.body")
+                .category(NotificationCategory.SECURITY)
+                .sourceModule("auth")
+                .relatedEntityId(principal.getId())
+                .relatedEntityType("AUTH")
+                .build());
+
+        return createAuthResult(principal);
+    }
+
     private AuthUserResponse toResponse(UserPrincipal principal) {
         var partnerRoles = principal.getPartnerRoles().entrySet().stream()
                 .map(e -> new PartnerRoleDto(e.getKey(), e.getValue().getValue()))
@@ -233,7 +279,8 @@ public class AuthService {
                 principal.getFirstName(),
                 principal.getLastName(),
                 principal.getTier().getLevel(),
-                partnerRoles
+                partnerRoles,
+                principal.isTwoFactorEnabled()
         );
     }
 
@@ -251,5 +298,17 @@ public class AuthService {
      * Carries the result of a successful authentication operation.
      */
     public record AuthResult(String accessToken, String refreshToken, AuthUserResponse user) {
+    }
+
+    /**
+     * Carries the result of a login attempt, including 2FA state.
+     *
+     * @param authResult         the auth tokens+user (null when twoFactorRequired is true)
+     * @param userId             the authenticated user's ID
+     * @param twoFactorRequired  whether 2FA verification is needed to complete login
+     * @param twoFactorEnabled   whether the user has 2FA enabled
+     */
+    public record LoginResult(AuthResult authResult, UUID userId,
+                              boolean twoFactorRequired, boolean twoFactorEnabled) {
     }
 }

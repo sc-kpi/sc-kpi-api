@@ -56,6 +56,19 @@ app:
     core-pool-size: ${ASYNC_CORE_POOL_SIZE:4}
     max-pool-size: ${ASYNC_MAX_POOL_SIZE:8}
     queue-capacity: ${ASYNC_QUEUE_CAPACITY:100}
+  mfa:
+    totp:
+      issuer: "SC-KPI"
+      algorithm: SHA1
+      digits: 6
+      period: 30
+    encryption-key: ${MFA_ENCRYPTION_KEY:dGhpcyBpcyBhIGRldiBlbmNyeXB0aW9uIGtleSAzMg==}
+    token-expiration: ${MFA_TOKEN_EXPIRATION:300000}
+    recovery-code-count: 10
+    max-verification-attempts: 5
+    enforcement:
+      grace-period-days: 7
+      required-tiers: 4,5
   notifications:
     sse-timeout-ms: ${NOTIFICATION_SSE_TIMEOUT:300000}
     sse-heartbeat-interval-ms: ${NOTIFICATION_SSE_HEARTBEAT:30000}
@@ -98,14 +111,38 @@ management:
     info:
       enabled: true
 
+rate-limit:
+  enabled: ${RATE_LIMIT_ENABLED:true}
+  storage-type: in-memory
+  max-bucket-count: ${RATE_LIMIT_MAX_BUCKETS:100000}
+  bucket-ttl-seconds: ${RATE_LIMIT_BUCKET_TTL:3600}
+  rules-cache-ttl-seconds: ${RATE_LIMIT_CACHE_TTL:30}
+  track-violations: true
+  max-violation-entries: 10000
+  whitelisted-ips: []
+  excluded-patterns:
+    - /actuator/**
+    - /swagger-ui/**
+    - /v3/api-docs/**
+  tier-defaults:
+    0: 30
+    1: 60
+    2: 120
+    3: 180
+    4: 240
+    5: 600
+
 feature-flags:
   cache-ttl-seconds: ${FEATURE_FLAGS_CACHE_TTL:30}
   overrides: {}
   defaults:
+    auth.mfa.totp: true
     notifications.enabled: true
     notifications.email: true
     notifications.sse: true
     notifications.admin-broadcast: true
+    rate-limiting.enabled: true
+    rate-limiting.admin: true
 
 server:
   port: ${SERVER_PORT:8080}

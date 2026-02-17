@@ -77,10 +77,16 @@ subprojects {
                     '**/dto/**',
                     '**/entity/**',
                     '**/repository/**',
+                    '**/adapter/**',
                     '**/security/JwtAuthenticationFilter*',
+                    '**/security/JwtTokenProvider*',
                     '**/actuator/**',
                     '**/sse/**',
                     '**/scheduler/**',
+                    '**/service/Totp*',
+                    '**/service/QrCode*',
+                    '**/service/MfaToken*',
+                    '**/service/TotpEncryption*',
                     '**/*Application*',
                 ])
             }))

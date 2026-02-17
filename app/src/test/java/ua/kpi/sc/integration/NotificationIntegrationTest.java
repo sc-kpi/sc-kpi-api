@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import tools.jackson.databind.ObjectMapper;
 import ua.kpi.sc.auth.dto.LoginRequest;
 import ua.kpi.sc.auth.dto.RegisterRequest;
+import ua.kpi.sc.auth.entity.TotpSecret;
+import ua.kpi.sc.auth.repository.TotpSecretRepository;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.notification.repository.NotificationRepository;
 import ua.kpi.sc.user.entity.User;
@@ -50,6 +52,9 @@ class NotificationIntegrationTest {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private TotpSecretRepository totpSecretRepository;
 
     private static final String REGISTER_URL = "/api/v1/auth/register";
     private static final String LOGIN_URL = "/api/v1/auth/login";
@@ -105,6 +110,15 @@ class NotificationIntegrationTest {
                                         new LoginRequest(request.email(), request.password()))))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        // Enable 2FA for admin users after obtaining token — filter re-queries DB on each request
+        if (tier.getLevel() >= CapabilityTier.SENIOR.getLevel()) {
+            totpSecretRepository.save(TotpSecret.builder()
+                    .userId(UUID.fromString(userId))
+                    .encryptedSecret("test-encrypted-secret")
+                    .enabled(true)
+                    .build());
+        }
 
         return new UserTokenPair(userId, extractAccessToken(loginResult), request.email(), request.password());
     }

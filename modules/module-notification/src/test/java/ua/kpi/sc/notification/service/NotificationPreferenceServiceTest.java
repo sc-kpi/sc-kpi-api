@@ -41,8 +41,8 @@ class NotificationPreferenceServiceTest {
 
             var prefs = service.getPreferences(userId);
 
-            // 4 categories x 2 channels = 8 default preferences
-            assertThat(prefs).hasSize(8);
+            // 5 categories x 2 channels = 10 default preferences
+            assertThat(prefs).hasSize(10);
         }
 
         @Test

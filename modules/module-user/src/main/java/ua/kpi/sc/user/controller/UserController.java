@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.sc.common.featureflag.FeatureFlag;
 import ua.kpi.sc.common.security.CapabilityTier;
+import ua.kpi.sc.common.security.RequireMfa;
 import ua.kpi.sc.common.security.RequireTier;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.user.dto.AssignPartnerLevelRequest;
@@ -88,6 +89,7 @@ public class UserController {
 
     @PostMapping
     @RequireTier(CapabilityTier.ADMIN)
+    @RequireMfa
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createUser(
             @Valid @RequestBody CreateUserRequest request,
@@ -106,6 +108,7 @@ public class UserController {
 
     @PatchMapping("/{id}/tier")
     @RequireTier(CapabilityTier.ADMIN)
+    @RequireMfa
     public UserResponse updateTier(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateTierRequest request,
@@ -115,6 +118,7 @@ public class UserController {
 
     @PatchMapping("/{id}/status")
     @RequireTier(CapabilityTier.ADMIN)
+    @RequireMfa
     public UserResponse updateStatus(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateStatusRequest request,
@@ -124,6 +128,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @RequireTier(CapabilityTier.ADMIN)
+    @RequireMfa
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(
             @PathVariable UUID id,
@@ -133,6 +138,7 @@ public class UserController {
 
     @PostMapping("/{id}/partners")
     @RequireTier(CapabilityTier.ADMIN)
+    @RequireMfa
     @ResponseStatus(HttpStatus.CREATED)
     @FeatureFlag("user.partner-levels")
     public PartnerMemberResponse assignPartnerLevel(

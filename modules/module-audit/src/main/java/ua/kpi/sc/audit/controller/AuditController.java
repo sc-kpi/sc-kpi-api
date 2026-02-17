@@ -22,6 +22,7 @@ import ua.kpi.sc.common.audit.AuditEntityType;
 import ua.kpi.sc.common.audit.AuditEventBuilder;
 import ua.kpi.sc.common.audit.AuditPublisher;
 import ua.kpi.sc.common.security.CapabilityTier;
+import ua.kpi.sc.common.security.RequireMfa;
 import ua.kpi.sc.common.security.RequireTier;
 import ua.kpi.sc.common.security.UserPrincipal;
 
@@ -56,6 +57,7 @@ public class AuditController {
     }
 
     @GetMapping("/export")
+    @RequireMfa
     public void exportCsv(
             @RequestParam(required = false) UUID actorId,
             @RequestParam(required = false) String entityType,

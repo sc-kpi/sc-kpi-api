@@ -94,7 +94,7 @@ class OAuthServiceTest {
 
     private AuthService.AuthResult testAuthResult() {
         return new AuthService.AuthResult("access-token", "refresh-token",
-                new AuthUserResponse(USER_ID, "test@kpi.ua", "Test", "User", 1, java.util.List.of()));
+                new AuthUserResponse(USER_ID, "test@kpi.ua", "Test", "User", 1, java.util.List.of(), false));
     }
 
     @Nested

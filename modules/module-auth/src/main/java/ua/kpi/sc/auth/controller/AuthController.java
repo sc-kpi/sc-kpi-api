@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.sc.auth.config.CookieProperties;
 import ua.kpi.sc.auth.config.JwtProperties;
+import ua.kpi.sc.auth.config.MfaProperties;
 import ua.kpi.sc.auth.dto.AuthUserResponse;
 import ua.kpi.sc.auth.dto.ForgotPasswordRequest;
 import ua.kpi.sc.auth.dto.LoginRequest;
+import ua.kpi.sc.auth.dto.LoginResponse;
 import ua.kpi.sc.auth.dto.RegisterRequest;
 import ua.kpi.sc.auth.dto.ResetPasswordRequest;
 import ua.kpi.sc.auth.service.AuthService;
+import ua.kpi.sc.auth.service.MfaTokenService;
 import ua.kpi.sc.auth.service.PasswordResetService;
 import ua.kpi.sc.auth.util.CookieUtil;
 import ua.kpi.sc.common.featureflag.FeatureFlag;
@@ -42,8 +45,10 @@ public class AuthController {
 
     private final AuthService authService;
     private final PasswordResetService passwordResetService;
+    private final MfaTokenService mfaTokenService;
     private final JwtProperties jwtProperties;
     private final CookieProperties cookieProperties;
+    private final MfaProperties mfaProperties;
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
@@ -56,10 +61,21 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Authenticate with email and password")
-    public ResponseEntity<AuthUserResponse> login(@Valid @RequestBody LoginRequest request) {
-        AuthService.AuthResult result = authService.login(request);
-        HttpHeaders headers = createTokenHeaders(result);
-        return ResponseEntity.ok().headers(headers).body(result.user());
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        AuthService.LoginResult result = authService.login(request);
+
+        if (result.twoFactorRequired()) {
+            String mfaToken = mfaTokenService.generateMfaToken(result.userId());
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.SET_COOKIE,
+                    CookieUtil.createMfaTokenCookie(mfaToken,
+                            mfaProperties.getTokenExpiration(), cookieProperties.isSecure()).toString());
+            return ResponseEntity.ok().headers(headers).body(LoginResponse.mfaChallenge());
+        }
+
+        HttpHeaders headers = createTokenHeaders(result.authResult());
+        return ResponseEntity.ok().headers(headers)
+                .body(LoginResponse.fromAuthUser(result.authResult().user(), result.twoFactorEnabled()));
     }
 
     @PostMapping("/logout")
@@ -73,6 +89,9 @@ public class AuthController {
         headers.add(HttpHeaders.SET_COOKIE,
                 CookieUtil.createDeleteCookie(SecurityConstants.REFRESH_TOKEN_COOKIE,
                         cookieProperties.isSecure()).toString());
+        headers.add(HttpHeaders.SET_COOKIE,
+                CookieUtil.createDeleteCookie(SecurityConstants.MFA_TOKEN_COOKIE,
+                        "/api/v1/auth/2fa", cookieProperties.isSecure()).toString());
         return ResponseEntity.ok().headers(headers).build();
     }
 

@@ -51,6 +51,7 @@ public class JwtTokenProvider {
                 .subject(principal.getId().toString())
                 .claim("email", principal.getEmail())
                 .claim("tier", principal.getTier().getLevel())
+                .claim("mfa", principal.isTwoFactorEnabled())
                 .claim("contexts", contexts)
                 .issuedAt(now)
                 .expiration(expiry)

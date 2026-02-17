@@ -1,6 +1,7 @@
 package ua.kpi.sc.auth.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.OncePerRequestFilter;
 import ua.kpi.sc.auth.security.JwtAuthenticationFilter;
 import ua.kpi.sc.common.security.handler.ProblemDetailAccessDeniedHandler;
 import ua.kpi.sc.common.security.handler.ProblemDetailAuthenticationEntryPoint;
@@ -51,12 +53,15 @@ public class SecurityFilterChainConfig {
     private final ProblemDetailAuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired(required = false)
+    private OncePerRequestFilter rateLimitFilter;
+
     @Value("${app.security.bcrypt-strength}")
     private int bcryptStrength;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -66,7 +71,8 @@ public class SecurityFilterChainConfig {
                                 "/api/v1/auth/register",
                                 "/api/v1/auth/refresh",
                                 "/api/v1/auth/forgot-password",
-                                "/api/v1/auth/reset-password"
+                                "/api/v1/auth/reset-password",
+                                "/api/v1/auth/2fa/verify-login"
                         ).permitAll()
                         .requestMatchers("/api/v1/auth/oauth2/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
@@ -86,8 +92,13 @@ public class SecurityFilterChainConfig {
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint)
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        if (rateLimitFilter != null) {
+            http.addFilterAfter(rateLimitFilter, JwtAuthenticationFilter.class);
+        }
+
+        return http.build();
     }
 
     @Bean

@@ -32,6 +32,9 @@ app:
       enabled: false
       cron: "0 0 3 * * ?"
 
+rate-limit:
+  enabled: false
+
 feature-flags:
   cache-ttl-seconds: 0
   defaults:
@@ -48,6 +51,8 @@ feature-flags:
     council.departments: true
     documents.management: true
     user.partner-levels: true
+    rate-limiting.enabled: false
+    rate-limiting.admin: true
 
 logging:
   level:

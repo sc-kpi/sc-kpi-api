@@ -36,6 +36,8 @@ public class UserPrincipal implements UserDetails {
     private final boolean active;
     @Builder.Default
     private final Map<UUID, PartnerLevel> partnerRoles = Map.of();
+    @Builder.Default
+    private final boolean twoFactorEnabled = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

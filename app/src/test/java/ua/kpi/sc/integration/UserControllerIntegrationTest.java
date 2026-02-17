@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import tools.jackson.databind.ObjectMapper;
 import ua.kpi.sc.auth.dto.RegisterRequest;
+import ua.kpi.sc.auth.entity.TotpSecret;
+import ua.kpi.sc.auth.repository.TotpSecretRepository;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.user.entity.User;
 import ua.kpi.sc.user.repository.UserRepository;
@@ -39,6 +41,9 @@ class UserControllerIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TotpSecretRepository totpSecretRepository;
 
     private static final String REGISTER_URL = "/api/v1/auth/register";
     private static final String LOGIN_URL = "/api/v1/auth/login";
@@ -85,6 +90,14 @@ class UserControllerIntegrationTest {
         return objectMapper.readTree(body).get("id").asText();
     }
 
+    private void enableTwoFactorForUser(UUID userId) {
+        totpSecretRepository.save(TotpSecret.builder()
+                .userId(userId)
+                .encryptedSecret("test-encrypted-secret")
+                .enabled(true)
+                .build());
+    }
+
     private String registerAndGetAdminToken() throws Exception {
         RegisterRequest request = uniqueRegisterRequest();
         MvcResult result = registerUser(request);
@@ -94,7 +107,7 @@ class UserControllerIntegrationTest {
         user.setCapabilityTier(CapabilityTier.ADMIN);
         userRepository.save(user);
 
-        // Re-login to get a token with updated tier
+        // Re-login to get a token with updated tier (before enabling 2FA)
         MvcResult loginResult = mockMvc.perform(
                         post(LOGIN_URL)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,6 +115,9 @@ class UserControllerIntegrationTest {
                                         new ua.kpi.sc.auth.dto.LoginRequest(request.email(), request.password()))))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        // Enable 2FA after obtaining token — filter re-queries DB on each request
+        enableTwoFactorForUser(UUID.fromString(userId));
 
         return extractAccessToken(loginResult);
     }
@@ -124,6 +140,9 @@ class UserControllerIntegrationTest {
                                         new ua.kpi.sc.auth.dto.LoginRequest(request.email(), request.password()))))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        // Enable 2FA after obtaining token — filter re-queries DB on each request
+        enableTwoFactorForUser(UUID.fromString(userId));
 
         return new UserTokenPair(userId, extractAccessToken(loginResult), request.email(), request.password());
     }
