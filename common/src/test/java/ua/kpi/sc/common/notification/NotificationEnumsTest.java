@@ -13,7 +13,8 @@ class NotificationEnumsTest {
                 NotificationCategory.SECURITY,
                 NotificationCategory.ADMIN,
                 NotificationCategory.SYSTEM,
-                NotificationCategory.FEATURE_FLAG
+                NotificationCategory.FEATURE_FLAG,
+                NotificationCategory.RATE_LIMIT
         );
     }
 

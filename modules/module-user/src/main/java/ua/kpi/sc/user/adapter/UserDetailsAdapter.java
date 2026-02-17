@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.PartnerLevel;
+import ua.kpi.sc.common.security.TwoFactorQueryPort;
 import ua.kpi.sc.common.security.UserDetailsPort;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.user.entity.PartnerMember;
@@ -31,6 +32,7 @@ public class UserDetailsAdapter implements UserDetailsPort {
 
     private final UserRepository userRepository;
     private final PartnerMemberRepository partnerMemberRepository;
+    private final TwoFactorQueryPort twoFactorQueryPort;
 
     @Override
     public Optional<UserPrincipal> loadByEmail(String email) {
@@ -139,6 +141,7 @@ public class UserDetailsAdapter implements UserDetailsPort {
                 .tier(user.getCapabilityTier())
                 .active(user.isActive())
                 .partnerRoles(partnerRoles)
+                .twoFactorEnabled(twoFactorQueryPort.isTwoFactorEnabled(user.getId()))
                 .build();
     }
 }

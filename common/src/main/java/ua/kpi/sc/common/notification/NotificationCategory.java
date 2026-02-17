@@ -9,5 +9,6 @@ public enum NotificationCategory {
     SECURITY,
     ADMIN,
     SYSTEM,
-    FEATURE_FLAG
+    FEATURE_FLAG,
+    RATE_LIMIT
 }

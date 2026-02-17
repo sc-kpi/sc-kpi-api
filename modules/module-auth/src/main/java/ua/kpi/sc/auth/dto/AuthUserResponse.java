@@ -15,7 +15,8 @@ public record AuthUserResponse(
         String firstName,
         String lastName,
         int capabilityTier,
-        List<PartnerRoleDto> partnerRoles
+        List<PartnerRoleDto> partnerRoles,
+        boolean twoFactorEnabled
 ) {
 
     /**

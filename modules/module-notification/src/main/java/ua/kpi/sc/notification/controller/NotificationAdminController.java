@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.sc.common.featureflag.FeatureFlag;
 import ua.kpi.sc.common.security.CapabilityTier;
+import ua.kpi.sc.common.security.RequireMfa;
 import ua.kpi.sc.common.security.RequireTier;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.notification.dto.BroadcastRequest;
@@ -54,6 +55,7 @@ public class NotificationAdminController {
 
     @PostMapping("/broadcast")
     @FeatureFlag("notifications.admin-broadcast")
+    @RequireMfa
     public Map<String, String> broadcast(@Valid @RequestBody BroadcastRequest request,
                                          @AuthenticationPrincipal UserPrincipal requester) {
         adminService.broadcast(request, requester);

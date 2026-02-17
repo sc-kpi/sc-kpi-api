@@ -15,6 +15,9 @@ spring:
     console:
       enabled: true
 
+rate-limit:
+  rules-cache-ttl-seconds: 5
+
 feature-flags:
   cache-ttl-seconds: 5
   defaults:

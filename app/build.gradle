@@ -17,6 +17,7 @@ dependencies {
     implementation project(':module-notification')
     implementation project(':module-audit')
     implementation project(':module-feature-flag')
+    implementation project(':module-rate-limit')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'

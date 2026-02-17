@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.kpi.sc.common.security.CapabilityTier;
 import ua.kpi.sc.common.security.PartnerLevel;
+import ua.kpi.sc.common.security.TwoFactorQueryPort;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.user.entity.PartnerMember;
 import ua.kpi.sc.user.entity.User;
@@ -30,6 +31,9 @@ class UserDetailsAdapterTest {
 
     @Mock
     private PartnerMemberRepository partnerMemberRepository;
+
+    @Mock
+    private TwoFactorQueryPort twoFactorQueryPort;
 
     @InjectMocks
     private UserDetailsAdapter adapter;

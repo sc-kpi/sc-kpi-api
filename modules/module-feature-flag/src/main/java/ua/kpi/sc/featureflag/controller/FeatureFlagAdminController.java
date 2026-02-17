@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kpi.sc.common.security.CapabilityTier;
+import ua.kpi.sc.common.security.RequireMfa;
 import ua.kpi.sc.common.security.RequireTier;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.featureflag.dto.BulkToggleRequest;
@@ -35,6 +36,7 @@ import ua.kpi.sc.featureflag.service.FeatureFlagService;
 @RequestMapping("/api/v1/admin/feature-flags")
 @Tag(name = "Feature Flags Admin", description = "Feature flag management endpoints (admin only)")
 @RequireTier(CapabilityTier.ADMIN)
+@RequireMfa
 @RequiredArgsConstructor
 public class FeatureFlagAdminController {
 

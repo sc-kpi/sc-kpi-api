@@ -21,6 +21,11 @@ public final class CookieUtil {
         return buildCookie(SecurityConstants.REFRESH_TOKEN_COOKIE, token, maxAgeMs / 1000, "/", secure);
     }
 
+    public static ResponseCookie createMfaTokenCookie(String token, long maxAgeMs, boolean secure) {
+        return buildCookie(SecurityConstants.MFA_TOKEN_COOKIE, token, maxAgeMs / 1000,
+                "/api/v1/auth/2fa", secure);
+    }
+
     public static ResponseCookie createDeleteCookie(String name, boolean secure) {
         return createDeleteCookie(name, "/", secure);
     }

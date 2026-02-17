@@ -21,6 +21,7 @@ import ua.kpi.sc.common.exception.ConflictException;
 import ua.kpi.sc.common.exception.ResourceNotFoundException;
 import ua.kpi.sc.common.exception.UnauthorizedException;
 import ua.kpi.sc.common.security.CapabilityTier;
+import ua.kpi.sc.common.security.TwoFactorQueryPort;
 import ua.kpi.sc.common.security.UserDetailsPort;
 import ua.kpi.sc.common.security.UserPrincipal;
 import ua.kpi.sc.auth.dto.LoginRequest;
@@ -50,6 +51,8 @@ class AuthServiceTest {
     private AuditPublisher auditPublisher;
     @Mock
     private NotificationPublisher notificationPublisher;
+    @Mock
+    private TwoFactorQueryPort twoFactorQueryPort;
 
     @InjectMocks
     private AuthService authService;
@@ -105,19 +108,36 @@ class AuthServiceTest {
     class LoginTests {
 
         @Test
-        void loginSuccessReturnsAuthResult() {
+        void loginSuccessReturnsLoginResult() {
             LoginRequest request = new LoginRequest("test@kpi.ua", "password123");
             when(userDetailsPort.loadByEmail("test@kpi.ua")).thenReturn(Optional.of(testPrincipal()));
             when(passwordEncoder.matches("password123", "$2a$12$hashed")).thenReturn(true);
+            when(twoFactorQueryPort.isTwoFactorEnabled(USER_ID)).thenReturn(false);
             when(jwtTokenProvider.generateAccessToken(any())).thenReturn("access-token");
             when(jwtTokenProvider.generateRefreshToken()).thenReturn("refresh-token");
             when(jwtProperties.getRefreshExpiration()).thenReturn(2592000000L);
             when(refreshTokenRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-            AuthService.AuthResult result = authService.login(request);
+            AuthService.LoginResult result = authService.login(request);
 
-            assertThat(result.accessToken()).isEqualTo("access-token");
-            assertThat(result.user().email()).isEqualTo("test@kpi.ua");
+            assertThat(result.twoFactorRequired()).isFalse();
+            assertThat(result.authResult()).isNotNull();
+            assertThat(result.authResult().accessToken()).isEqualTo("access-token");
+            assertThat(result.authResult().user().email()).isEqualTo("test@kpi.ua");
+        }
+
+        @Test
+        void loginWithTwoFactorEnabledReturnsMfaChallenge() {
+            LoginRequest request = new LoginRequest("test@kpi.ua", "password123");
+            when(userDetailsPort.loadByEmail("test@kpi.ua")).thenReturn(Optional.of(testPrincipal()));
+            when(passwordEncoder.matches("password123", "$2a$12$hashed")).thenReturn(true);
+            when(twoFactorQueryPort.isTwoFactorEnabled(USER_ID)).thenReturn(true);
+
+            AuthService.LoginResult result = authService.login(request);
+
+            assertThat(result.twoFactorRequired()).isTrue();
+            assertThat(result.authResult()).isNull();
+            assertThat(result.userId()).isEqualTo(USER_ID);
         }
 
         @Test

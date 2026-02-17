@@ -29,6 +29,15 @@ public enum AuditAction {
     OAUTH_LOGIN,
     OAUTH_LINKED,
 
+    // MFA actions
+    MFA_CHALLENGE_ISSUED,
+    MFA_ENABLED,
+    MFA_DISABLED,
+    MFA_VERIFIED,
+    MFA_VERIFICATION_FAILED,
+    MFA_RECOVERY_USED,
+    MFA_RECOVERY_REGENERATED,
+
     // Audit system actions
     AUDIT_EXPORTED,
 
@@ -37,5 +46,8 @@ public enum AuditAction {
     NOTIFICATION_READ,
     NOTIFICATION_BROADCAST,
     NOTIFICATION_PREFERENCES_UPDATED,
-    NOTIFICATION_CLEANUP
+    NOTIFICATION_CLEANUP,
+
+    // Rate limit actions
+    RATE_LIMIT_VIOLATED
 }

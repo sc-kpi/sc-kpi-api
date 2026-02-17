@@ -21,6 +21,8 @@ public final class SecurityConstants {
     public static final String ACCESS_TOKEN_COOKIE = "access_token";
     /** Cookie name for the JWT refresh token. */
     public static final String REFRESH_TOKEN_COOKIE = "refresh_token";
+    /** Cookie name for the short-lived MFA challenge token. */
+    public static final String MFA_TOKEN_COOKIE = "mfa_token";
 
     /**
      * URL patterns that should be accessible without authentication.

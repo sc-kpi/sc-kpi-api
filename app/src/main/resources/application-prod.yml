@@ -1,3 +1,7 @@
+rate-limit:
+  rules-cache-ttl-seconds: 60
+  max-bucket-count: 500000
+
 feature-flags:
   cache-ttl-seconds: 30
 
