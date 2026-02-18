@@ -7,7 +7,7 @@
 
 ## Overview
 
-Student Council KPI backend API — a Spring Boot 4 modular monolith that powers the digital platform for KPI's Student Council. The application is structured as 9 Gradle subprojects compiled into a single deployable JAR.
+Student Council KPI backend API — a Spring Boot 4 modular monolith that powers the digital platform for KPI's Student Council. The application is structured as 11 Gradle subprojects compiled into a single deployable JAR.
 
 ## Tech Stack
 
@@ -25,7 +25,7 @@ Student Council KPI backend API — a Spring Boot 4 modular monolith that powers
 
 ## Architecture
 
-The project follows a **modular monolith** architecture with 9 Gradle subprojects packaged into a single deployable Spring Boot JAR.
+The project follows a **modular monolith** architecture with 11 Gradle subprojects packaged into a single deployable Spring Boot JAR.
 
 ```mermaid
 graph TD
@@ -38,6 +38,8 @@ graph TD
     document[module-document]
     notification[module-notification]
     audit[module-audit]
+    featureflag[module-feature-flag]
+    ratelimit[module-rate-limit]
 
     common[common]
 
@@ -48,6 +50,8 @@ graph TD
     app --> document
     app --> notification
     app --> audit
+    app --> featureflag
+    app --> ratelimit
 
     auth --> common
     user --> common
@@ -56,6 +60,8 @@ graph TD
     document --> common
     notification --> common
     audit --> common
+    featureflag --> common
+    ratelimit --> common
 ```
 
 - **app** — Application entry point; aggregates all modules, provides cross-cutting configuration (OpenAPI, async, profiles).
@@ -75,6 +81,8 @@ graph TD
 | `module-document` | Document management | [docs/module-document.md](docs/module-document.md) |
 | `module-notification` | Notifications and Telegram integration | [docs/module-notification.md](docs/module-notification.md) |
 | `module-audit` | Audit logging for admin oversight | [docs/module-audit.md](docs/module-audit.md) |
+| `module-feature-flag` | Feature flag management and evaluation | [docs/module-feature-flag.md](docs/module-feature-flag.md) |
+| `module-rate-limit` | Rate limiting with token bucket algorithm | [docs/module-rate-limit.md](docs/module-rate-limit.md) |
 
 ## Getting Started
 
@@ -115,6 +123,10 @@ Configuration is managed via `app/src/main/resources/application.yml` and profil
 | `ASYNC_CORE_POOL_SIZE` | `4` | Async executor core threads |
 | `ASYNC_MAX_POOL_SIZE` | `8` | Async executor max threads |
 | `ASYNC_QUEUE_CAPACITY` | `100` | Async executor queue capacity |
+| `MFA_ENCRYPTION_KEY` | *(required)* | AES-256 key for TOTP secret encryption |
+| `TOTP_ISSUER` | `SC KPI` | Issuer name shown in authenticator apps |
+| `COOKIE_SECURE` | `true` | Secure flag on auth cookies (disable for local dev) |
+| `RATE_LIMIT_ENABLED` | `true` | Enable/disable request rate limiting |
 
 ### Profiles
 
@@ -182,6 +194,10 @@ flowchart LR
 
 Context-aware roles (`DepartmentRole`, `ProjectRole`, `PartnerLevel`) map to effective tier levels for scoped authorization.
 
+### Two-Factor Authentication (2FA)
+
+The platform supports TOTP-based two-factor authentication. Sensitive admin operations (user management, feature flag changes, rate limit configuration, audit export, broadcasting) require MFA verification via the `@RequireMfa` annotation. The MFA enforcement is processed by `MfaMethodAuthorizationManager` and runs after tier checks.
+
 See [docs/common.md](docs/common.md) for full details.
 
 ## Code Quality
@@ -211,13 +227,15 @@ sc-kpi-api/
 │       ├── exception/            # ApiException hierarchy, GlobalExceptionHandler
 │       └── security/             # PBAC: tiers, roles, UserPrincipal, ports
 ├── modules/
-│   ├── module-auth/              # Authentication & security filter chain
+│   ├── module-auth/              # Authentication, JWT, TOTP 2FA, OAuth
 │   ├── module-user/              # User management
 │   ├── module-engagements/       # Clubs, projects (engagements)
 │   ├── module-council/           # Departments (council)
 │   ├── module-document/          # Document management
-│   ├── module-notification/      # Notifications & Telegram webhook
-│   └── module-audit/             # Audit logging
+│   ├── module-notification/      # Notifications, SSE, email delivery
+│   ├── module-audit/             # Audit logging & CSV export
+│   ├── module-feature-flag/      # Feature flag management & evaluation
+│   └── module-rate-limit/        # Rate limiting (token bucket)
 ├── config/checkstyle/            # Checkstyle configuration
 ├── docs/                         # Per-module documentation
 ├── build.gradle                  # Root build script

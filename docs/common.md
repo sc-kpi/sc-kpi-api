@@ -258,7 +258,136 @@ Authorization can be scoped by context using these enums:
 | `DOCUMENTS` | 2 | `documents` |
 | `BASIC` | 1 | `basic` |
 
-## Port Interface
+## MFA Enforcement
+
+### RequireMfa
+
+Annotation for enforcing two-factor authentication on methods or types:
+
+```java
+@RequireMfa
+public void sensitiveAdminOperation() { ... }
+```
+
+Enforced at runtime by `MfaMethodAuthorizationManager` via a `AuthorizationManagerBeforeMethodInterceptor` registered by `MethodSecurityMfaConfig` (order 750, runs after tier checks). Verifies that the authenticated user has completed 2FA setup and verification.
+
+### MfaMethodAuthorizationManager
+
+Implements `AuthorizationManager<MethodInvocation>`. Checks if the principal's MFA status is verified by querying `TwoFactorQueryPort`. Denies access if 2FA is required but not completed.
+
+### MethodSecurityMfaConfig
+
+`@Configuration` class that registers the MFA method interceptor at order 750 (after Spring Security's default 600 for `@PreAuthorize` and the custom tier interceptor).
+
+## Audit Infrastructure
+
+### AuditAction
+
+Enum defining all auditable actions: `CREATED`, `UPDATED`, `DELETED`, `TOGGLED`, `LOGIN`, `LOGIN_FAILED`, `LOGOUT`, `REGISTER`, `MFA_ENABLED`, `MFA_DISABLED`, `MFA_VERIFIED`, `MFA_VERIFICATION_FAILED`, `MFA_CHALLENGE_ISSUED`, `MFA_RECOVERY_USED`, `MFA_RECOVERY_REGENERATED`, `PASSWORD_RESET_REQUESTED`, `PASSWORD_RESET_COMPLETED`, `OAUTH_LOGIN`, `OAUTH_LINKED`, `OVERRIDE_ADDED`, `OVERRIDE_REMOVED`, `BULK_TOGGLED`, `NOTIFICATION_BROADCAST`, `NOTIFICATION_CLEANUP`, `NOTIFICATION_PREFERENCES_UPDATED`, `EXPORTED`.
+
+### AuditEntityType
+
+Enum defining auditable entity types: `USER`, `FEATURE_FLAG`, `RATE_LIMIT_RULE`, `NOTIFICATION`, `NOTIFICATION_PREFERENCE`, `AUDIT_LOG`.
+
+### AuditEvent
+
+Immutable record carrying audit event data: `actorId`, `actorEmail`, `action`, `entityType`, `entityId`, `entityName`, `fieldName`, `oldValue`, `newValue`, `details`, `sourceModule`, `ipAddress`, `timestamp`.
+
+### AuditEventBuilder
+
+Fluent builder for `AuditEvent`. Auto-populates `actorId`, `actorEmail`, `ipAddress`, and `timestamp` from the current `SecurityContext` and request.
+
+### AuditPublisher
+
+Port interface for fire-and-forget audit event publishing:
+
+```java
+public interface AuditPublisher {
+    void publish(AuditEvent event);
+}
+```
+
+Implemented by `AuditPublisherImpl` in the audit module.
+
+## Notification Infrastructure
+
+### NotificationCategory
+
+Enum: `SECURITY`, `ADMIN`, `SYSTEM`, `FEATURE_FLAG`, `RATE_LIMIT`.
+
+### NotificationChannel
+
+Enum: `IN_APP`, `EMAIL`.
+
+### NotificationEvent
+
+Immutable record: `userId`, `titleKey`, `bodyKey`, `bodyArgs`, `category`, `sourceModule`, `relatedEntityId`, `relatedEntityType`.
+
+### NotificationEventBuilder
+
+Fluent builder for `NotificationEvent`.
+
+### NotificationPublisher
+
+Port interface for async notification publishing:
+
+```java
+public interface NotificationPublisher {
+    void publishToUser(UUID userId, NotificationEvent event);
+    void publishToTier(CapabilityTier minimumTier, NotificationEvent event);
+    void publishToAll(NotificationEvent event);
+}
+```
+
+Implemented by `NotificationPublisherImpl` in the notification module.
+
+## Feature Flag Infrastructure
+
+### FeatureFlag (Annotation)
+
+Annotation for gating methods or classes behind feature flags:
+
+```java
+@FeatureFlag("auth.registration")
+public void register() { ... }
+```
+
+When the flag is disabled, the method throws `ResourceNotFoundException` (404). Processed by `FeatureFlagMethodInterceptor` in the feature-flag module.
+
+### FeatureFlagChecker
+
+Port interface for flag evaluation:
+
+```java
+public interface FeatureFlagChecker {
+    boolean isEnabled(String key);
+    boolean isEnabled(String key, UUID userId, Integer tierLevel);
+}
+```
+
+Implemented by `FeatureFlagCheckerAdapter` in the feature-flag module.
+
+## JPA Converters
+
+### CapabilityTierConverter
+
+`@Converter(autoApply = true)` — converts `CapabilityTier` enum to/from `Integer` for JPA persistence.
+
+### PartnerLevelConverter
+
+`@Converter(autoApply = true)` — converts `PartnerLevel` enum to/from `String` for JPA persistence.
+
+## Utility Classes
+
+### InputSanitizer
+
+Static utility that strips HTML tags from input strings to prevent XSS.
+
+### PasswordValidator
+
+Static utility that validates password length (8–72 characters, enforced for BCrypt safety).
+
+## Port Interfaces
 
 ### UserDetailsPort
 
@@ -276,10 +405,42 @@ public interface UserDetailsPort {
 
 This interface is implemented by the user module's persistence layer to decouple the security infrastructure from user storage details.
 
+### TwoFactorQueryPort
+
+Hexagonal boundary for querying 2FA status:
+
+```java
+public interface TwoFactorQueryPort {
+    boolean isTwoFactorEnabled(UUID userId);
+}
+```
+
+Implemented by `TwoFactorQueryAdapter` in the auth module.
+
+### UserQueryPort
+
+Hexagonal boundary for querying users across modules:
+
+```java
+public interface UserQueryPort {
+    List<UUID> findActiveUserIdsByMinimumTier(CapabilityTier minimumTier);
+    List<UUID> findAllActiveUserIds();
+    Optional<String> getEmailById(UUID userId);
+}
+```
+
+Implemented by `UserQueryAdapter` in the user module.
+
 ## Package Structure
 
 ```
 ua.kpi.sc.common
+├── audit/
+│   ├── AuditAction.java
+│   ├── AuditEntityType.java
+│   ├── AuditEvent.java
+│   ├── AuditEventBuilder.java
+│   └── AuditPublisher.java
 ├── exception/
 │   ├── ApiException.java
 │   ├── BadRequestException.java
@@ -288,22 +449,41 @@ ua.kpi.sc.common
 │   ├── ResourceNotFoundException.java
 │   ├── ConflictException.java
 │   └── GlobalExceptionHandler.java
-└── security/
-    ├── CapabilityTier.java
-    ├── ContextType.java
-    ├── DepartmentRole.java
-    ├── ProjectRole.java
-    ├── PartnerLevel.java
-    ├── UserPrincipal.java
-    ├── UserDetailsPort.java
-    ├── RequireTier.java
-    ├── PermissionChecker.java
-    ├── SecurityConstants.java
-    ├── authorization/
-    │   ├── TierAuthorizationManager.java
-    │   ├── TierMethodAuthorizationManager.java
-    │   └── MethodSecurityTierConfig.java
-    └── handler/
-        ├── ProblemDetailAccessDeniedHandler.java
-        └── ProblemDetailAuthenticationEntryPoint.java
+├── featureflag/
+│   ├── FeatureFlag.java              # @FeatureFlag annotation
+│   └── FeatureFlagChecker.java
+├── notification/
+│   ├── NotificationCategory.java
+│   ├── NotificationChannel.java
+│   ├── NotificationEvent.java
+│   ├── NotificationEventBuilder.java
+│   └── NotificationPublisher.java
+├── security/
+│   ├── CapabilityTier.java
+│   ├── CapabilityTierConverter.java
+│   ├── ContextType.java
+│   ├── DepartmentRole.java
+│   ├── ProjectRole.java
+│   ├── PartnerLevel.java
+│   ├── PartnerLevelConverter.java
+│   ├── UserPrincipal.java
+│   ├── UserDetailsPort.java
+│   ├── TwoFactorQueryPort.java
+│   ├── UserQueryPort.java
+│   ├── RequireTier.java
+│   ├── RequireMfa.java
+│   ├── PermissionChecker.java
+│   ├── SecurityConstants.java
+│   ├── authorization/
+│   │   ├── TierAuthorizationManager.java
+│   │   ├── TierMethodAuthorizationManager.java
+│   │   ├── MethodSecurityTierConfig.java
+│   │   ├── MfaMethodAuthorizationManager.java
+│   │   └── MethodSecurityMfaConfig.java
+│   └── handler/
+│       ├── ProblemDetailAccessDeniedHandler.java
+│       └── ProblemDetailAuthenticationEntryPoint.java
+└── util/
+    ├── InputSanitizer.java
+    └── PasswordValidator.java
 ```
