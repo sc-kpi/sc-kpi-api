@@ -62,7 +62,7 @@ app:
       algorithm: SHA1
       digits: 6
       period: 30
-    encryption-key: ${MFA_ENCRYPTION_KEY:dGhpcyBpcyBhIGRldiBlbmNyeXB0aW9uIGtleSAzMg==}
+    encryption-key: ${MFA_ENCRYPTION_KEY:dGhpcyBpcyBhIGRldiBlbmNyeXB0aW9uIGtleSAzMiE=}
     token-expiration: ${MFA_TOKEN_EXPIRATION:300000}
     recovery-code-count: 10
     max-verification-attempts: 5
