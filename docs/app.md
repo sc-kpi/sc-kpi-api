@@ -14,6 +14,8 @@ Application entry point module. Aggregates all domain modules into a single depl
 | `module-document` | Implementation (project) |
 | `module-notification` | Implementation (project) |
 | `module-audit` | Implementation (project) |
+| `module-feature-flag` | Implementation (project) |
+| `module-rate-limit` | Implementation (project) |
 | `spring-boot-starter-web` | Implementation |
 | `spring-boot-starter-security` | Implementation |
 | `spring-boot-starter-actuator` | Implementation |
