@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 
@@ -81,7 +82,9 @@ public class TotpService {
         });
 
         byte[] secret = SecretGenerator.generate();
+        log.warn("[2FA-DEBUG] setupTotp: raw secret {} bytes, base32-encoded-by-lib", secret.length);
         String base32Secret = encodeBase32(secret);
+        log.warn("[2FA-DEBUG] setupTotp: manualEntryKey prefix={} len={}", base32Secret.substring(0, 4), base32Secret.length());
         String encryptedSecret = encryptionService.encrypt(base32Secret);
 
         MfaProperties.TotpConfig totpConfig = mfaProperties.getTotp();
@@ -115,6 +118,8 @@ public class TotpService {
         }
 
         String base32Secret = encryptionService.decrypt(totpSecret.getEncryptedSecret());
+        log.warn("[2FA-DEBUG] verifyAndEnable: decrypted prefix={} len={}, receivedCode={}",
+                base32Secret.substring(0, 4), base32Secret.length(), code);
         if (!verifyTotpCode(base32Secret, code, totpSecret)) {
             throw new BadRequestException("Invalid verification code");
         }
@@ -298,6 +303,9 @@ public class TotpService {
     private boolean verifyTotpCode(String base32Secret, String code, TotpSecret totpSecret) {
         try {
             byte[] secret = decodeBase32(base32Secret);
+            log.warn("[2FA-DEBUG] verifyTotpCode: decoded {} bytes, first8hex={}",
+                    secret.length,
+                    HexFormat.of().formatHex(secret, 0, Math.min(8, secret.length)));
             TOTPGenerator totp = new TOTPGenerator.Builder(secret)
                     .withHOTPGenerator(b -> {
                         b.withPasswordLength(totpSecret.getDigits());
@@ -305,9 +313,15 @@ public class TotpService {
                     })
                     .withPeriod(Duration.ofSeconds(totpSecret.getPeriod()))
                     .build();
-            return totp.verify(code, 1); // allow 1 period clock skew
+            long epochSec = Instant.now().getEpochSecond();
+            String expected = totp.now();
+            log.warn("[2FA-DEBUG] verifyTotpCode: epochSec={} counter={} expected={} received={}",
+                    epochSec, epochSec / totpSecret.getPeriod(), expected, code);
+            boolean result = totp.verify(code, 1);
+            log.warn("[2FA-DEBUG] verifyTotpCode: verify(code,1)={}", result);
+            return result;
         } catch (Exception e) {
-            log.debug("TOTP verification failed: {}", e.getMessage());
+            log.error("[2FA-DEBUG] TOTP verification EXCEPTION", e);
             return false;
         }
     }
