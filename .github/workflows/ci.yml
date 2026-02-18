@@ -137,6 +137,7 @@ jobs:
         env:
           SPRING_PROFILES_ACTIVE: dev
           JWT_SECRET: ${{ env.JWT_SECRET }}
+          RATE_LIMIT_ENABLED: "false"
 
       - name: Wait for API health
         run: |
