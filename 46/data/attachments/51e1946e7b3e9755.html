@@ -1,0 +1,3431 @@
+<div>Status code 200 </div>
+
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;openapi&quot;: &quot;3.1.0&quot;,
+    &quot;info&quot;: {
+        &quot;title&quot;: &quot;Student Council KPI API&quot;,
+        &quot;description&quot;: &quot;Student Council of KPI - Backend API&quot;,
+        &quot;contact&quot;: {
+            &quot;name&quot;: &quot;DCT Team&quot;,
+            &quot;url&quot;: &quot;https://sc.kpi.ua&quot;
+        },
+        &quot;version&quot;: &quot;1.0.0&quot;
+    },
+    &quot;servers&quot;: [
+        {
+            &quot;url&quot;: &quot;http://localhost:8080&quot;,
+            &quot;description&quot;: &quot;Generated server url&quot;
+        }
+    ],
+    &quot;security&quot;: [
+        {
+            &quot;bearerAuth&quot;: [
+                
+            ]
+        }
+    ],
+    &quot;tags&quot;: [
+        {
+            &quot;name&quot;: &quot;Users&quot;,
+            &quot;description&quot;: &quot;User management endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;OAuth&quot;,
+            &quot;description&quot;: &quot;OAuth 2.0 authentication endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Audit&quot;,
+            &quot;description&quot;: &quot;Audit log endpoints (admin only)&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Notification Preferences&quot;,
+            &quot;description&quot;: &quot;User notification preference endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Feature Flags Admin&quot;,
+            &quot;description&quot;: &quot;Feature flag management endpoints (admin only)&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Notification Admin&quot;,
+            &quot;description&quot;: &quot;Admin notification management endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Authentication&quot;,
+            &quot;description&quot;: &quot;Authentication endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Notifications&quot;,
+            &quot;description&quot;: &quot;User notification endpoints&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Two-Factor Authentication&quot;,
+            &quot;description&quot;: &quot;TOTP 2FA setup, verification, and management&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Rate Limits Admin&quot;,
+            &quot;description&quot;: &quot;Rate limit rule management endpoints (admin only)&quot;
+        },
+        {
+            &quot;name&quot;: &quot;Feature Flags&quot;,
+            &quot;description&quot;: &quot;Feature flag evaluation endpoints&quot;
+        }
+    ],
+    &quot;paths&quot;: {
+        &quot;/api/v1/notifications/preferences&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notification Preferences&quot;
+                ],
+                &quot;operationId&quot;: &quot;getPreferences&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;array&quot;,
+                                    &quot;items&quot;: {
+                                        &quot;$ref&quot;: &quot;#/components/schemas/NotificationPreferenceResponse&quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;put&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notification Preferences&quot;
+                ],
+                &quot;operationId&quot;: &quot;updatePreferences&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdatePreferencesRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;array&quot;,
+                                    &quot;items&quot;: {
+                                        &quot;$ref&quot;: &quot;#/components/schemas/NotificationPreferenceResponse&quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;listUsers&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;search&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;tier&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int32&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;active&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageUserListResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;createUser&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/CreateUserRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/partners&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;assignPartnerLevel&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/AssignPartnerLevelRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PartnerMemberResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/reset-password&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Reset password using a token from email&quot;,
+                &quot;operationId&quot;: &quot;resetPassword&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ResetPasswordRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/register&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Register a new user&quot;,
+                &quot;operationId&quot;: &quot;register&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/RegisterRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/refresh&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Refresh access token using refresh token cookie&quot;,
+                &quot;operationId&quot;: &quot;refresh&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/logout&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Log out and clear tokens&quot;,
+                &quot;operationId&quot;: &quot;logout&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/login&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Authenticate with email and password&quot;,
+                &quot;operationId&quot;: &quot;login&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/LoginRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/LoginResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/forgot-password&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Request a password reset email&quot;,
+                &quot;operationId&quot;: &quot;forgotPassword&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ForgotPasswordRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/2fa/verify-setup&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Two-Factor Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Complete TOTP setup by verifying a code&quot;,
+                &quot;operationId&quot;: &quot;verifySetup&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/TotpVerifyRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/RecoveryCodesResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/2fa/verify-login&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Two-Factor Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Complete MFA login by verifying TOTP code or recovery code&quot;,
+                &quot;operationId&quot;: &quot;verifyLogin&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/TotpVerifyRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/LoginResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/2fa/setup&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Two-Factor Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Start TOTP 2FA setup&quot;,
+                &quot;operationId&quot;: &quot;setup&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/TotpSetupResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/2fa/recovery-codes/regenerate&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Two-Factor Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Regenerate recovery codes&quot;,
+                &quot;operationId&quot;: &quot;regenerateRecoveryCodes&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/TotpVerifyRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/RecoveryCodesResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/2fa/disable&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Two-Factor Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Disable TOTP 2FA&quot;,
+                &quot;operationId&quot;: &quot;disable&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/TotpDisableRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/rate-limits&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Rate Limits Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;listRules&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageRateLimitRuleResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Rate Limits Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;createRule&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/CreateRateLimitRuleRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/RateLimitRuleResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/notifications/broadcast&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notification Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;broadcast&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/BroadcastRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;object&quot;,
+                                    &quot;additionalProperties&quot;: {
+                                        &quot;type&quot;: &quot;string&quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;listFlags&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageFeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;createFlag&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/CreateFeatureFlagRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}/overrides&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;addOverride&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/CreateOverrideRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;201&quot;: {
+                        &quot;description&quot;: &quot;Created&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/OverrideResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/bulk-toggle&quot;: {
+            &quot;post&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;bulkToggle&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/BulkToggleRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;array&quot;,
+                                    &quot;items&quot;: {
+                                        &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;getUser&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;deleteUser&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            },
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateUser&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateUserRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/tier&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateTier&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateTierRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/status&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateStatus&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateStatusRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/me&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;getMe&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateSelf&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateUserRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/me/password&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;changePassword&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ChangePasswordRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/notifications/{id}/read&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notifications&quot;
+                ],
+                &quot;operationId&quot;: &quot;markAsRead&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/notifications/mark-read&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notifications&quot;
+                ],
+                &quot;operationId&quot;: &quot;markBatchAsRead&quot;,
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/MarkReadRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/notifications/mark-all-read&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notifications&quot;
+                ],
+                &quot;operationId&quot;: &quot;markAllAsRead&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/rate-limits/{id}&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Rate Limits Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getRule&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/RateLimitRuleResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Rate Limits Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;deleteRule&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            },
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Rate Limits Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateRule&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateRateLimitRuleRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/RateLimitRuleResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/rate-limits/{id}/toggle&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Rate Limits Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;toggleRule&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/RateLimitToggleRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/RateLimitRuleResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;deleteFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            },
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;updateFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/UpdateFeatureFlagRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}/toggle&quot;: {
+            &quot;patch&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;toggleFlag&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;requestBody&quot;: {
+                    &quot;content&quot;: {
+                        &quot;application/json&quot;: {
+                            &quot;schema&quot;: {
+                                &quot;$ref&quot;: &quot;#/components/schemas/ToggleFeatureFlagRequest&quot;
+                            }
+                        }
+                    },
+                    &quot;required&quot;: true
+                },
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/notifications&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notifications&quot;
+                ],
+                &quot;operationId&quot;: &quot;getNotifications&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;category&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;read&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;boolean&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;from&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;to&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageNotificationResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/notifications/unread-count&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notifications&quot;
+                ],
+                &quot;operationId&quot;: &quot;getUnreadCount&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/UnreadCountResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/notifications/stream&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notifications&quot;
+                ],
+                &quot;operationId&quot;: &quot;stream&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/SseEmitter&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/feature-flags&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags&quot;
+                ],
+                &quot;operationId&quot;: &quot;evaluateAll&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;object&quot;,
+                                    &quot;additionalProperties&quot;: {
+                                        &quot;type&quot;: &quot;boolean&quot;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/feature-flags/{key}&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags&quot;
+                ],
+                &quot;operationId&quot;: &quot;evaluate&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;key&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagEvaluationResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/oauth2/google&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;OAuth&quot;
+                ],
+                &quot;summary&quot;: &quot;Initiate Google OAuth 2.0 login&quot;,
+                &quot;operationId&quot;: &quot;googleLogin&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/oauth2/callback/google&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;OAuth&quot;
+                ],
+                &quot;summary&quot;: &quot;Google OAuth 2.0 callback&quot;,
+                &quot;operationId&quot;: &quot;googleCallback&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;code&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;state&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/me&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Get current authenticated user info&quot;,
+                &quot;operationId&quot;: &quot;getMe_1&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuthUserResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/auth/2fa/status&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Two-Factor Authentication&quot;
+                ],
+                &quot;summary&quot;: &quot;Get current 2FA status&quot;,
+                &quot;operationId&quot;: &quot;status&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/TotpStatusResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/rate-limits/stats&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Rate Limits Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getStats&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/RateLimitStatsResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/notifications&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notification Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getAllNotifications&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;category&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;search&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;from&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;to&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageNotificationResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/notifications/stats&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notification Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;getStats_1&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/NotificationStatsResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/audit-logs&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Audit&quot;
+                ],
+                &quot;operationId&quot;: &quot;getAuditLogs&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;actorId&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;entityType&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;action&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;sourceModule&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;entityId&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;from&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;to&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;search&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;pageable&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/Pageable&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/PageAuditEventResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/audit-logs/stats&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Audit&quot;
+                ],
+                &quot;operationId&quot;: &quot;getStats_2&quot;,
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;$ref&quot;: &quot;#/components/schemas/AuditStatsResponse&quot;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/audit-logs/export&quot;: {
+            &quot;get&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Audit&quot;
+                ],
+                &quot;operationId&quot;: &quot;exportCsv&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;actorId&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;entityType&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;action&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;sourceModule&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;entityId&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;from&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;to&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;date-time&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;search&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/users/{id}/partners/{partnerId}&quot;: {
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Users&quot;
+                ],
+                &quot;operationId&quot;: &quot;removePartnerLevel&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;partnerId&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/notifications/cleanup&quot;: {
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Notification Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;cleanup&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;days&quot;,
+                        &quot;in&quot;: &quot;query&quot;,
+                        &quot;required&quot;: false,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int32&quot;,
+                            &quot;default&quot;: 90
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;200&quot;: {
+                        &quot;description&quot;: &quot;OK&quot;,
+                        &quot;content&quot;: {
+                            &quot;*/*&quot;: {
+                                &quot;schema&quot;: {
+                                    &quot;type&quot;: &quot;object&quot;,
+                                    &quot;additionalProperties&quot;: {
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        &quot;/api/v1/admin/feature-flags/{id}/overrides/{overrideId}&quot;: {
+            &quot;delete&quot;: {
+                &quot;tags&quot;: [
+                    &quot;Feature Flags Admin&quot;
+                ],
+                &quot;operationId&quot;: &quot;removeOverride&quot;,
+                &quot;parameters&quot;: [
+                    {
+                        &quot;name&quot;: &quot;id&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    },
+                    {
+                        &quot;name&quot;: &quot;overrideId&quot;,
+                        &quot;in&quot;: &quot;path&quot;,
+                        &quot;required&quot;: true,
+                        &quot;schema&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        }
+                    }
+                ],
+                &quot;responses&quot;: {
+                    &quot;204&quot;: {
+                        &quot;description&quot;: &quot;No Content&quot;
+                    }
+                }
+            }
+        }
+    },
+    &quot;components&quot;: {
+        &quot;schemas&quot;: {
+            &quot;PreferenceUpdate&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;category&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;channel&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;category&quot;,
+                    &quot;channel&quot;
+                ]
+            },
+            &quot;UpdatePreferencesRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;preferences&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/PreferenceUpdate&quot;
+                        }
+                    }
+                }
+            },
+            &quot;NotificationPreferenceResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;category&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;channel&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;CreateUserRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;tier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 5,
+                        &quot;minimum&quot;: 0
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;firstName&quot;,
+                    &quot;lastName&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;PartnerMemberResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;partnerId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;level&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;assignedAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;UserResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;active&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;createdAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    },
+                    &quot;partnerRoles&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/PartnerMemberResponse&quot;
+                        }
+                    }
+                }
+            },
+            &quot;AssignPartnerLevelRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;partnerId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;level&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;level&quot;,
+                    &quot;partnerId&quot;
+                ]
+            },
+            &quot;ResetPasswordRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;token&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;newPassword&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;newPassword&quot;,
+                    &quot;token&quot;
+                ]
+            },
+            &quot;RegisterRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[\\p{L}\\p{M}\\s&#39;.\\-]+$&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[\\p{L}\\p{M}\\s&#39;.\\-]+$&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;firstName&quot;,
+                    &quot;lastName&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;AuthUserResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;partnerRoles&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/PartnerRoleDto&quot;
+                        }
+                    },
+                    &quot;twoFactorEnabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;PartnerRoleDto&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;partnerId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;level&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                }
+            },
+            &quot;LoginRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;LoginResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;partnerRoles&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/PartnerRoleDto&quot;
+                        }
+                    },
+                    &quot;twoFactorEnabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;twoFactorRequired&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;ForgotPasswordRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;email&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;email&quot;
+                ]
+            },
+            &quot;TotpVerifyRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;code&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;code&quot;
+                ]
+            },
+            &quot;RecoveryCodesResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;codes&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                }
+            },
+            &quot;TotpSetupResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;qrCodeDataUri&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;manualEntryKey&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                }
+            },
+            &quot;TotpDisableRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;password&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;code&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;code&quot;,
+                    &quot;password&quot;
+                ]
+            },
+            &quot;CreateRateLimitRuleRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 255,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[a-z][a-z0-9.\\-]*$&quot;
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;endpointPattern&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 500,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;httpMethod&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;limitPerPeriod&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;periodSeconds&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;burstCapacity&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;scope&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;GLOBAL&quot;,
+                            &quot;IP&quot;,
+                            &quot;USER&quot;,
+                            &quot;TIER&quot;
+                        ]
+                    },
+                    &quot;targetTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 5,
+                        &quot;minimum&quot;: 0
+                    },
+                    &quot;targetUserId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;timeWindowStart&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;timeWindowEnd&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;priority&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;endpointPattern&quot;,
+                    &quot;name&quot;,
+                    &quot;scope&quot;
+                ]
+            },
+            &quot;RateLimitRuleResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;endpointPattern&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;httpMethod&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;limitPerPeriod&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;periodSeconds&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;burstCapacity&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;scope&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;GLOBAL&quot;,
+                            &quot;IP&quot;,
+                            &quot;USER&quot;,
+                            &quot;TIER&quot;
+                        ]
+                    },
+                    &quot;targetTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;targetUserId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;timeWindowStart&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;timeWindowEnd&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;priority&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;createdBy&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;createdAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    },
+                    &quot;updatedAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;BroadcastRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;titleKey&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;bodyKey&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;bodyArgs&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    &quot;category&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;SECURITY&quot;,
+                            &quot;ADMIN&quot;,
+                            &quot;SYSTEM&quot;,
+                            &quot;FEATURE_FLAG&quot;,
+                            &quot;RATE_LIMIT&quot;
+                        ]
+                    },
+                    &quot;targetTier&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;bodyKey&quot;,
+                    &quot;category&quot;,
+                    &quot;titleKey&quot;
+                ]
+            },
+            &quot;CreateFeatureFlagRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;key&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 255,
+                        &quot;minLength&quot;: 0,
+                        &quot;pattern&quot;: &quot;^[a-z][a-z0-9.\\-]*$&quot;
+                    },
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 255,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;environment&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;rolloutPercentage&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 100,
+                        &quot;minimum&quot;: 0
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;key&quot;,
+                    &quot;name&quot;
+                ]
+            },
+            &quot;FeatureFlagResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;key&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;environment&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;rolloutPercentage&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;overrides&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/OverrideResponse&quot;
+                        }
+                    },
+                    &quot;createdBy&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;createdAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    },
+                    &quot;updatedAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;OverrideResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;overrideType&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;TIER&quot;,
+                            &quot;USER&quot;
+                        ]
+                    },
+                    &quot;tierLevel&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;userId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;CreateOverrideRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;overrideType&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;TIER&quot;,
+                            &quot;USER&quot;
+                        ]
+                    },
+                    &quot;tierLevel&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;userId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;enabled&quot;,
+                    &quot;overrideType&quot;
+                ]
+            },
+            &quot;BulkToggleRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;keys&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        },
+                        &quot;minItems&quot;: 1
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;reason&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;enabled&quot;,
+                    &quot;keys&quot;
+                ]
+            },
+            &quot;UpdateUserRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 100,
+                        &quot;minLength&quot;: 0
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;firstName&quot;,
+                    &quot;lastName&quot;
+                ]
+            },
+            &quot;UpdateTierRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;tier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 5,
+                        &quot;minimum&quot;: 0
+                    }
+                }
+            },
+            &quot;UpdateStatusRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;active&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;ChangePasswordRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;currentPassword&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;minLength&quot;: 1
+                    },
+                    &quot;newPassword&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 72,
+                        &quot;minLength&quot;: 8
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;currentPassword&quot;,
+                    &quot;newPassword&quot;
+                ]
+            },
+            &quot;MarkReadRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;ids&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;,
+                            &quot;format&quot;: &quot;uuid&quot;
+                        },
+                        &quot;minItems&quot;: 1
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;ids&quot;
+                ]
+            },
+            &quot;UpdateRateLimitRuleRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;endpointPattern&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 500,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;httpMethod&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;limitPerPeriod&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;periodSeconds&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;burstCapacity&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;scope&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;enum&quot;: [
+                            &quot;GLOBAL&quot;,
+                            &quot;IP&quot;,
+                            &quot;USER&quot;,
+                            &quot;TIER&quot;
+                        ]
+                    },
+                    &quot;targetTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 5,
+                        &quot;minimum&quot;: 0
+                    },
+                    &quot;targetUserId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;timeWindowStart&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;timeWindowEnd&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;priority&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;RateLimitToggleRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;enabled&quot;
+                ]
+            },
+            &quot;UpdateFeatureFlagRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;name&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;maxLength&quot;: 255,
+                        &quot;minLength&quot;: 0
+                    },
+                    &quot;description&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;environment&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;rolloutPercentage&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;maximum&quot;: 100,
+                        &quot;minimum&quot;: 0
+                    }
+                }
+            },
+            &quot;ToggleFeatureFlagRequest&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;reason&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    }
+                },
+                &quot;required&quot;: [
+                    &quot;enabled&quot;
+                ]
+            },
+            &quot;Pageable&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;page&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 0
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;,
+                        &quot;minimum&quot;: 1
+                    },
+                    &quot;sort&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    }
+                }
+            },
+            &quot;PageUserListResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/UserListResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;PageableObject&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;offset&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;unpaged&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;pageNumber&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageSize&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;paged&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    }
+                }
+            },
+            &quot;SortObject&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;unsorted&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;sorted&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;UserListResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;email&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;firstName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;lastName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;capabilityTier&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;active&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;NotificationResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;userId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;titleKey&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;bodyKey&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;bodyArgs&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;type&quot;: &quot;string&quot;
+                        }
+                    },
+                    &quot;category&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;sourceModule&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;relatedEntityId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;relatedEntityType&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;read&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;readAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    },
+                    &quot;createdAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;PageNotificationResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/NotificationResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;UnreadCountResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;count&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    }
+                }
+            },
+            &quot;SseEmitter&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;timeout&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    }
+                }
+            },
+            &quot;FeatureFlagEvaluationResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;key&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;TotpStatusResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;enabled&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;recoveryCodesRemaining&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;enabledAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;PageRateLimitRuleResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/RateLimitRuleResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;RateLimitStatsResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalViolations&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;activeBuckets&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;violationsByEndpoint&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;additionalProperties&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                        }
+                    }
+                }
+            },
+            &quot;NotificationStatsResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;total&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;last24h&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;byCategory&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;additionalProperties&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                        }
+                    }
+                }
+            },
+            &quot;PageFeatureFlagResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/FeatureFlagResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;AuditEventResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;id&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;actorId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;actorEmail&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;action&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;entityType&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;entityId&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;uuid&quot;
+                    },
+                    &quot;entityName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;fieldName&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;oldValue&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;newValue&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;details&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;sourceModule&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;ipAddress&quot;: {
+                        &quot;type&quot;: &quot;string&quot;
+                    },
+                    &quot;createdAt&quot;: {
+                        &quot;type&quot;: &quot;string&quot;,
+                        &quot;format&quot;: &quot;date-time&quot;
+                    }
+                }
+            },
+            &quot;PageAuditEventResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalPages&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;totalElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;size&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;content&quot;: {
+                        &quot;type&quot;: &quot;array&quot;,
+                        &quot;items&quot;: {
+                            &quot;$ref&quot;: &quot;#/components/schemas/AuditEventResponse&quot;
+                        }
+                    },
+                    &quot;number&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;pageable&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/PageableObject&quot;
+                    },
+                    &quot;sort&quot;: {
+                        &quot;$ref&quot;: &quot;#/components/schemas/SortObject&quot;
+                    },
+                    &quot;numberOfElements&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int32&quot;
+                    },
+                    &quot;first&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;last&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    },
+                    &quot;empty&quot;: {
+                        &quot;type&quot;: &quot;boolean&quot;
+                    }
+                }
+            },
+            &quot;AuditStatsResponse&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;properties&quot;: {
+                    &quot;totalEvents&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;eventsLast24h&quot;: {
+                        &quot;type&quot;: &quot;integer&quot;,
+                        &quot;format&quot;: &quot;int64&quot;
+                    },
+                    &quot;byEntityType&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;additionalProperties&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                        }
+                    },
+                    &quot;byAction&quot;: {
+                        &quot;type&quot;: &quot;object&quot;,
+                        &quot;additionalProperties&quot;: {
+                            &quot;type&quot;: &quot;integer&quot;,
+                            &quot;format&quot;: &quot;int64&quot;
+                        }
+                    }
+                }
+            }
+        },
+        &quot;securitySchemes&quot;: {
+            &quot;bearerAuth&quot;: {
+                &quot;type&quot;: &quot;http&quot;,
+                &quot;scheme&quot;: &quot;bearer&quot;,
+                &quot;bearerFormat&quot;: &quot;JWT&quot;
+            }
+        }
+    }
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>X-Frame-Options: DENY</div>
+        <div>Keep-Alive: timeout=60</div>
+        <div>Cache-Control: no-cache, no-store, max-age=0, must-revalidate</div>
+        <div>X-Content-Type-Options: nosniff</div>
+        <div>Connection: keep-alive</div>
+        <div>Vary: Access-Control-Request-Headers</div>
+        <div>Pragma: no-cache</div>
+        <div>Expires: 0</div>
+        <div>X-XSS-Protection: 0</div>
+        <div>Content-Length: 38044</div>
+        <div>Date: Wed, 18 Feb 2026 10:47:01 GMT</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
