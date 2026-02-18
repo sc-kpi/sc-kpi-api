@@ -7,14 +7,12 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 
 import com.bastiaanjansen.otp.HMACAlgorithm;
 import com.bastiaanjansen.otp.SecretGenerator;
 import com.bastiaanjansen.otp.TOTPGenerator;
-import org.apache.commons.codec.binary.Base32;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,7 +62,6 @@ public class TotpService {
 
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private static final String RECOVERY_CODE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static final Base32 BASE32 = new Base32();
 
     /**
      * Initiates TOTP setup for a user. Generates a secret, stores it encrypted,
@@ -81,10 +78,10 @@ public class TotpService {
             totpSecretRepository.flush();
         });
 
+        // SecretGenerator.generate() returns base32-encoded bytes (not raw bytes),
+        // so we convert to String directly — do NOT re-encode with base32.
         byte[] secret = SecretGenerator.generate();
-        log.warn("[2FA-DEBUG] setupTotp: raw secret {} bytes, base32-encoded-by-lib", secret.length);
-        String base32Secret = encodeBase32(secret);
-        log.warn("[2FA-DEBUG] setupTotp: manualEntryKey prefix={} len={}", base32Secret.substring(0, 4), base32Secret.length());
+        String base32Secret = new String(secret, StandardCharsets.US_ASCII);
         String encryptedSecret = encryptionService.encrypt(base32Secret);
 
         MfaProperties.TotpConfig totpConfig = mfaProperties.getTotp();
@@ -118,8 +115,6 @@ public class TotpService {
         }
 
         String base32Secret = encryptionService.decrypt(totpSecret.getEncryptedSecret());
-        log.warn("[2FA-DEBUG] verifyAndEnable: decrypted prefix={} len={}, receivedCode={}",
-                base32Secret.substring(0, 4), base32Secret.length(), code);
         if (!verifyTotpCode(base32Secret, code, totpSecret)) {
             throw new BadRequestException("Invalid verification code");
         }
@@ -302,10 +297,8 @@ public class TotpService {
 
     private boolean verifyTotpCode(String base32Secret, String code, TotpSecret totpSecret) {
         try {
-            byte[] secret = decodeBase32(base32Secret);
-            log.warn("[2FA-DEBUG] verifyTotpCode: decoded {} bytes, first8hex={}",
-                    secret.length,
-                    HexFormat.of().formatHex(secret, 0, Math.min(8, secret.length)));
+            // TOTPGenerator internally base32-decodes the secret bytes to get the raw HMAC key
+            byte[] secret = base32Secret.getBytes(StandardCharsets.US_ASCII);
             TOTPGenerator totp = new TOTPGenerator.Builder(secret)
                     .withHOTPGenerator(b -> {
                         b.withPasswordLength(totpSecret.getDigits());
@@ -313,15 +306,9 @@ public class TotpService {
                     })
                     .withPeriod(Duration.ofSeconds(totpSecret.getPeriod()))
                     .build();
-            long epochSec = Instant.now().getEpochSecond();
-            String expected = totp.now();
-            log.warn("[2FA-DEBUG] verifyTotpCode: epochSec={} counter={} expected={} received={}",
-                    epochSec, epochSec / totpSecret.getPeriod(), expected, code);
-            boolean result = totp.verify(code, 1);
-            log.warn("[2FA-DEBUG] verifyTotpCode: verify(code,1)={}", result);
-            return result;
+            return totp.verify(code, 1); // allow 1 period clock skew
         } catch (Exception e) {
-            log.error("[2FA-DEBUG] TOTP verification EXCEPTION", e);
+            log.debug("TOTP verification failed: {}", e.getMessage());
             return false;
         }
     }
@@ -365,11 +352,4 @@ public class TotpService {
         return sb.toString();
     }
 
-    private static String encodeBase32(byte[] data) {
-        return BASE32.encodeAsString(data).replace("=", "");
-    }
-
-    private static byte[] decodeBase32(String data) {
-        return BASE32.decode(data);
-    }
 }
