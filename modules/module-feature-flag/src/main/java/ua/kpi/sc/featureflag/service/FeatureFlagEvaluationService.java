@@ -44,36 +44,7 @@ public class FeatureFlagEvaluationService {
             throw new ResourceNotFoundException("FeatureFlag", key);
         }
 
-        FeatureFlag flag = flagOpt.get();
-
-        // 2. Per-user override
-        if (userId != null) {
-            for (FeatureFlagOverride override : flag.getOverrides()) {
-                if (override.getOverrideType() == OverrideType.USER
-                        && userId.equals(override.getUserId())) {
-                    return override.isEnabled();
-                }
-            }
-        }
-
-        // 3. Per-tier override
-        if (tierLevel != null) {
-            for (FeatureFlagOverride override : flag.getOverrides()) {
-                if (override.getOverrideType() == OverrideType.TIER
-                        && tierLevel.equals(override.getTierLevel())) {
-                    return override.isEnabled();
-                }
-            }
-        }
-
-        // 4. Percentage rollout
-        if (userId != null && flag.getRolloutPercentage() < 100 && flag.isEnabled()) {
-            int hash = Math.abs((userId + ":" + key).hashCode()) % 100;
-            return hash < flag.getRolloutPercentage();
-        }
-
-        // 5. Global DB default
-        return flag.isEnabled();
+        return evaluateFlag(flagOpt.get(), userId, tierLevel);
     }
 
     @Transactional(readOnly = true)
@@ -83,16 +54,47 @@ public class FeatureFlagEvaluationService {
         // Start with config defaults
         result.putAll(properties.getDefaults());
 
-        // Evaluate all DB flags
+        // Evaluate all DB flags directly from loaded entities (no re-query)
         var flags = flagRepository.findAllWithOverrides();
         for (FeatureFlag flag : flags) {
-            result.put(flag.getKey(), evaluate(flag.getKey(), userId, tierLevel));
+            result.put(flag.getKey(), evaluateFlag(flag, userId, tierLevel));
         }
 
         // Apply config overrides (highest priority)
         result.putAll(properties.getOverrides());
 
         return result;
+    }
+
+    private boolean evaluateFlag(FeatureFlag flag, UUID userId, Integer tierLevel) {
+        // Per-user override
+        if (userId != null) {
+            for (FeatureFlagOverride override : flag.getOverrides()) {
+                if (override.getOverrideType() == OverrideType.USER
+                        && userId.equals(override.getUserId())) {
+                    return override.isEnabled();
+                }
+            }
+        }
+
+        // Per-tier override
+        if (tierLevel != null) {
+            for (FeatureFlagOverride override : flag.getOverrides()) {
+                if (override.getOverrideType() == OverrideType.TIER
+                        && tierLevel.equals(override.getTierLevel())) {
+                    return override.isEnabled();
+                }
+            }
+        }
+
+        // Percentage rollout
+        if (userId != null && flag.getRolloutPercentage() < 100 && flag.isEnabled()) {
+            int hash = Math.abs((userId + ":" + flag.getKey()).hashCode()) % 100;
+            return hash < flag.getRolloutPercentage();
+        }
+
+        // Global DB default
+        return flag.isEnabled();
     }
 
     @CacheEvict(cacheManager = "featureFlagCacheManager", cacheNames = "featureFlags", allEntries = true)
