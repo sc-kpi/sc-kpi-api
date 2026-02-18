@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ua.kpi.sc.auth.config.JwtProperties;
 import ua.kpi.sc.auth.config.MfaProperties;
+import ua.kpi.sc.common.exception.UnauthorizedException;
 
 /**
  * Generates and validates short-lived MFA challenge JWTs.
@@ -62,7 +63,7 @@ public class MfaTokenService {
      *
      * @param token the MFA JWT string
      * @return the user's UUID if valid
-     * @throws IllegalArgumentException if the token is invalid or not an MFA token
+     * @throws UnauthorizedException if the token is invalid or not an MFA token
      */
     public UUID validateAndExtractUserId(String token) {
         try {
@@ -74,13 +75,13 @@ public class MfaTokenService {
 
             String type = claims.get("type", String.class);
             if (!MFA_TOKEN_TYPE.equals(type)) {
-                throw new IllegalArgumentException("Not an MFA token");
+                throw new UnauthorizedException("Not an MFA token");
             }
 
             return UUID.fromString(claims.getSubject());
         } catch (JwtException e) {
             log.debug("Invalid MFA token: {}", e.getMessage());
-            throw new IllegalArgumentException("Invalid or expired MFA token", e);
+            throw new UnauthorizedException("Invalid or expired MFA token");
         }
     }
 }

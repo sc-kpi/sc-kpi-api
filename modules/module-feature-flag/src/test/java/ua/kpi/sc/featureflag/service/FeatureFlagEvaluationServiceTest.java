@@ -130,8 +130,6 @@ class FeatureFlagEvaluationServiceTest {
         flag2.setOverrides(List.of());
 
         when(flagRepository.findAllWithOverrides()).thenReturn(List.of(flag1, flag2));
-        when(flagRepository.findByKeyWithOverrides("flag.one")).thenReturn(Optional.of(flag1));
-        when(flagRepository.findByKeyWithOverrides("flag.two")).thenReturn(Optional.of(flag2));
 
         Map<String, Boolean> result = service.evaluateAll(null, null);
 
@@ -147,8 +145,6 @@ class FeatureFlagEvaluationServiceTest {
         disabledFlag.setOverrides(List.of());
 
         when(flagRepository.findAllWithOverrides()).thenReturn(List.of(enabledFlag, disabledFlag));
-        when(flagRepository.findByKeyWithOverrides("enabled.flag")).thenReturn(Optional.of(enabledFlag));
-        when(flagRepository.findByKeyWithOverrides("disabled.flag")).thenReturn(Optional.of(disabledFlag));
 
         Map<String, Boolean> result = service.evaluateAll(UUID.randomUUID(), 1);
 

@@ -77,6 +77,7 @@ public class TotpService {
                 throw new BadRequestException("Two-factor authentication is already enabled");
             }
             totpSecretRepository.delete(existing);
+            totpSecretRepository.flush();
         });
 
         byte[] secret = SecretGenerator.generate();
@@ -114,8 +115,11 @@ public class TotpService {
         }
 
         String base32Secret = encryptionService.decrypt(totpSecret.getEncryptedSecret());
+        log.debug("verifyAndEnable: userId={}, secretLen={}, secretPrefix={}, code={}, digits={}, period={}",
+                userId, base32Secret.length(), base32Secret.substring(0, 4), code,
+                totpSecret.getDigits(), totpSecret.getPeriod());
         if (!verifyTotpCode(base32Secret, code, totpSecret)) {
-            throw new UnauthorizedException("Invalid verification code");
+            throw new BadRequestException("Invalid verification code");
         }
 
         totpSecret.setEnabled(true);
@@ -203,6 +207,11 @@ public class TotpService {
      */
     @Transactional
     public void disableTotp(UUID userId, String password, String code) {
+        // Check TOTP is enabled before validating credentials
+        TotpSecret totpSecret = totpSecretRepository.findByUserId(userId)
+                .filter(TotpSecret::isEnabled)
+                .orElseThrow(() -> new BadRequestException("Two-factor authentication is not enabled"));
+
         UserPrincipal principal = userDetailsPort.loadById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
@@ -210,7 +219,8 @@ public class TotpService {
             throw new UnauthorizedException("Invalid password");
         }
 
-        if (!verifyCode(userId, code)) {
+        String base32Secret = encryptionService.decrypt(totpSecret.getEncryptedSecret());
+        if (!verifyTotpCode(base32Secret, code, totpSecret)) {
             throw new UnauthorizedException("Invalid verification code");
         }
 
@@ -298,7 +308,11 @@ public class TotpService {
                     })
                     .withPeriod(Duration.ofSeconds(totpSecret.getPeriod()))
                     .build();
-            return totp.verify(code, 1); // allow 1 period clock skew
+            String expected = totp.now();
+            boolean result = totp.verify(code, 1); // allow 1 period clock skew
+            log.debug("verifyTotpCode: provided={}, expected={}, match={}, secretBytes={}, time={}",
+                    code, expected, result, secret.length, System.currentTimeMillis() / 1000);
+            return result;
         } catch (Exception e) {
             log.debug("TOTP verification failed: {}", e.getMessage());
             return false;
